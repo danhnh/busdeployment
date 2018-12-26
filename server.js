@@ -25,4 +25,5 @@ app.post('/oauth2/token', (request, res, next) => {
         res.status(400).json("Invalid");
     });
 });
-app.listen(443);
+app.listen(process.env.PORT||5000);
+console.log('app running on '+(process.env.PORT||5000));

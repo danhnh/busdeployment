@@ -627,7 +627,7 @@ class App extends Component {
                 </Button>
               </div>}
             </div>
-            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:20}}>
+            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:20, maxWidth: 600}}>
               <VerticalTimeline>
                 {this.state.eventTimelineData.map((event, index) => {
                   return (

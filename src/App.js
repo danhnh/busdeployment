@@ -57,7 +57,7 @@ const dot = (color = '#ccc') => ({
 });
 
 const colourStyles = {
-  control: styles => ({ ...styles, backgroundColor: 'white', width: '70%' }),
+  control: styles => ({ ...styles, backgroundColor: 'white', width: '100%' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     return {
       ...styles,
@@ -457,7 +457,7 @@ class App extends Component {
                       id="standard-multiline-flexible"
                       label="CMND/Căn cước"
                       disabled={this.state.completed}
-                      style={{ marginLeft: 20, marginRight: 20 }}
+                      style={{ marginLeft: 20, marginRight: 20, width: 300 }}
                       value={this.state.cmnd}
                       onChange={this.handleChange('cmnd')}
                       fullWidth
@@ -591,7 +591,7 @@ class App extends Component {
                       </FormGroup>
                     </FormControl>
                   </div>
-                  <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
+                  <div style={{ marginLeft: 20, marginTop: 30, width: 300 }}>
                     <Select
                       isDisabled={this.state.completed}
                       value={this.state.roommate}
@@ -608,7 +608,7 @@ class App extends Component {
                 </div>
               )}
               {!this.state.registrationInfo.willJoin && (
-                <div style={{ width: 300 }}>
+                <div style={{ width: 400 }}>
                   <TextField
                     id="standard-multiline-flexible-more"
                     label="Lý do từ chối"
@@ -621,13 +621,16 @@ class App extends Component {
                   />
                 </div>
               )}
-              {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 50 }}>
+              {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 30, textAlign: 'center', flexDirection: 'column'}}>
                 <Button variant="contained" color='primary' size='large' onClick={this.registry}>
                   ĐĂNG KÝ
                 </Button>
+                {this.state.showError && <div className="App-error">
+                  <span>{this.state.errorMessage}</span>
+                </div>}
               </div>}
             </div>
-            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:20, maxWidth: 600}}>
+            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:10}}>
               <VerticalTimeline>
                 {this.state.eventTimelineData.map((event, index) => {
                   return (

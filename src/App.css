@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: white;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-form {
+  flex: 1;
+  position: relative;
+  background-color: #f4f4f4;
+  margin-right: 20px;
+  margin-left: 20px;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* .App-form::before, .App-form::after{
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:300px;
+  background: #777;
+  -webkit-box-shadow: 0 15px 10px #777;
+  -moz-box-shadow: 0 15px 10px #777;
+  box-shadow: 0 15px 10px #777;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+}
+
+.App-form:after
+{
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+  right: 10px;
+  left: auto;
+} */
+
+.App-logo {
+  margin-bottom: 5vh;
+  max-width: 50%
+}
+
+.App-title {
+  color: #264295;
+  margin-bottom: 5vh;
+  max-width: 80%;
+  font-size: 80px
+}
+
+.App-btn {
+  padding: 10vmin
+}

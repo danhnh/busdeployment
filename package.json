@@ -1,16 +1,34 @@
 {
-  "name": "tempbusdeploy2019",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "name": "businessdeployment2019",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "cors": "^2.8.5",
+    "@material-ui/core": "^3.7.1",
+    "contentful": "^7.0.5",
     "express": "^4.16.4",
-    "node-fetch": "^2.3.0"
-  }
+    "firebase": "^5.7.1",
+    "node-fetch": "^2.3.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-loading-screen": "^0.0.17",
+    "react-oauth-flow": "^1.2.0",
+    "react-scripts": "2.1.2",
+    "react-select": "^2.1.2",
+    "react-vertical-timeline-component": "^2.3.1"
+  },
+  "scripts": {
+    "start": "react-scripts build && node server.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

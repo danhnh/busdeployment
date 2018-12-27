@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 //For testing
 // const clientId = "F3tSSYr2nCqndlGTrbWug";
 // const clientSecretId = 'yH444V2JomKHKgfMJ4exicODWVDPPrn38wCnSwjHFY';
-// const url = 'http://locahost:5000';
+// const url = 'http://localhost:5000';
 
 // For production
 const clientId = "0JqrtQdnp8sRHVr2pxx0dA";

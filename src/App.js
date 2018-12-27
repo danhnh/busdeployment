@@ -87,7 +87,8 @@ class App extends Component {
       eventTimelineData: [],
       reason: "",
       cmnd: "",
-      completed: false
+      completed: false,
+      flex: 'column'
     }
   }
 
@@ -345,6 +346,29 @@ class App extends Component {
     })
   }
 
+  updateDimensions() {
+    if(window.innerWidth < 1000) {
+      this.setState({ flex: 'column' });
+    } else {
+      this.setState({ flex: 'row' });
+    }
+  }
+
+  /**
+   * Add event listener
+   */
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+  }
+
+  /**
+   * Remove event listener
+   */
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  }
+
   render() {
 
     return (
@@ -391,7 +415,7 @@ class App extends Component {
               message={<span id="message-id">{this.state.errorMessage}</span>}
             />
           </div> :
-          <div style={{ padding: 10, display: 'flex', flexDirection: 'row' }}>
+          <div style={{ padding: 10, display: 'flex', flexDirection: this.state.flex }}>
             <div className="App-form">
               <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60, backgroundColor: '#dbdbdb' }}>
                 <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />
@@ -524,7 +548,7 @@ class App extends Component {
                     </FormControl>
                   </div>
                   <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
-                    <FormControl component="fieldset" style={{ marginRight: 130 }}>
+                    <FormControl component="fieldset" style={{ marginRight: 100 }}>
                       <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
                       <FormGroup>
                         {this.state.staySchedules.map((stay, index) => {
@@ -584,7 +608,7 @@ class App extends Component {
                 </div>
               )}
               {!this.state.registrationInfo.willJoin && (
-                <div style={{ width: '80%' }}>
+                <div style={{ width: 300 }}>
                   <TextField
                     id="standard-multiline-flexible-more"
                     label="Lý do từ chối"
@@ -596,7 +620,6 @@ class App extends Component {
                     margin="normal"
                   />
                 </div>
-
               )}
               {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 50 }}>
                 <Button variant="contained" color='primary' size='large' onClick={this.registry}>
@@ -604,12 +627,12 @@ class App extends Component {
                 </Button>
               </div>}
             </div>
-            <div style={{ flex: 2, backgroundColor: '#f7f7f7' }}>
+            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:20}}>
               <VerticalTimeline>
                 {this.state.eventTimelineData.map((event, index) => {
                   return (
-                    <VerticalTimelineElement style={{ maxWidth: 900 }}
-                      className="vertical-timeline-element--work"
+                    <VerticalTimelineElement
+                      className="vertical-timeline-element-work"
                       date={`${event.date}\n${event.time}`}
                       iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}>
                       <h3 className="vertical-timeline-element-title">{event.title}</h3>

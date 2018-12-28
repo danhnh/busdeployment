@@ -22,12 +22,12 @@ import LoadingScreen from 'react-loading-screen';
 import './App.css';
 
 //For testing
-// const clientId = "F3tSSYr2nCqndlGTrbWug";
-// const url = 'http://localhost:5000';
+const clientId = "F3tSSYr2nCqndlGTrbWug";
+const url = 'http://localhost:5000';
 
 //For production
-const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
-const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
+// const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
+// const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
 
 const urlToken = `${url}/oauth2/token`;
 
@@ -192,6 +192,8 @@ class App extends Component {
         usersData.push({
           value: userArr[i].updated_full_name,
           label: userArr[i].updated_full_name,
+          email: userArr[i].email,
+          mugshot_url: userArr[i].mugshot_url
         });
       }
 
@@ -222,6 +224,8 @@ class App extends Component {
         eventUsers: usersData,
         eatSchedules: eatSchedules,
         staySchedules: staySchedules
+      }, () => {
+        this.getEventDetails();
       })
     })
   }
@@ -253,7 +257,6 @@ class App extends Component {
     this.getEventUsersAndSchedules();
     this.getTransporationTypes();
     this.getLocations();
-    this.getEventDetails();
   }
 
   handleChange = name => event => {
@@ -327,13 +330,24 @@ class App extends Component {
     firebase.database().ref(`Topics/BusinessDeployment/Events/2019/programDetails`).once('value').then(snapshot => {
       let data = [];
       snapshot.forEach(child => {
+        let imageUrl = '';
+        if (child.hasChild('email')){
+          let email = child.val().email;
+          let memberList = this.state.eventUsers;
+          memberList.forEach(user => {
+            if (user.email === email){
+              imageUrl = user.mugshot_url;
+            }
+          });
+        }
         let tempChild = {
           time: child.val().startTime,
           date: child.val().date,
           title: child.val().title,
           description: child.val().host !== "''" ? child.val().host : null,
           allow: child.val().allow,
-          key: child.key
+          key: child.key,
+          imageUrl: imageUrl
         }
         data.push(tempChild);
       });
@@ -637,7 +651,8 @@ class App extends Component {
                     <VerticalTimelineElement
                       className="vertical-timeline-element-work"
                       date={`${event.date}\n${event.time}`}
-                      iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}>
+                      iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
+                      icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
                       <h3 className="vertical-timeline-element-title">{event.title}</h3>
                       <p>
                         {event.description}

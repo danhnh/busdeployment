@@ -22,12 +22,12 @@ import LoadingScreen from 'react-loading-screen';
 import './App.css';
 
 //For testing
-const clientId = "F3tSSYr2nCqndlGTrbWug";
-const url = 'http://localhost:5000';
+// const clientId = "F3tSSYr2nCqndlGTrbWug";
+// const url = 'http://localhost:5000';
 
 //For production
-// const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
-// const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
+const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
+const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
 
 const urlToken = `${url}/oauth2/token`;
 

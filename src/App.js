@@ -150,22 +150,30 @@ class App extends Component {
     firebase.database().ref('TransportationTypeArriveTypes').once('value').then(snapshot => {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
+      let transporationTypesDataNote = [];
       transportationTypes.forEach((transType) => {
         transporationTypesData.push(transType.name);
+        transporationTypesDataNote.push(transType.note);
       });
       this.setState({
-        transTypesArrive: transporationTypesData
+        ...this.state,
+        transTypesArrive: transporationTypesData,
+        transTypesArriveNote: transporationTypesDataNote
       })
     });
 
     firebase.database().ref('TransportationTypeDepartureTypes').once('value').then(snapshot => {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
+      let transporationTypesDataNote = [];
       transportationTypes.forEach((transType) => {
         transporationTypesData.push(transType.name);
+        transporationTypesDataNote.push(transType.note);
       });
       this.setState({
-        transTypesDeparture: transporationTypesData
+        ...this.state,
+        transTypesDeparture: transporationTypesData,
+        transTypesDepartureNote: transporationTypesDataNote
       })
     });
   }
@@ -331,11 +339,11 @@ class App extends Component {
       let data = [];
       snapshot.forEach(child => {
         let imageUrl = '';
-        if (child.hasChild('email')){
+        if (child.hasChild('email')) {
           let email = child.val().email;
           let memberList = this.state.eventUsers;
           memberList.forEach(user => {
-            if (user.email === email){
+            if (user.email === email) {
               imageUrl = user.mugshot_url.replace("48x48", "500x500");;
             }
           });
@@ -361,7 +369,7 @@ class App extends Component {
   }
 
   updateDimensions() {
-    if(window.innerWidth < 1000) {
+    if (window.innerWidth < 1000) {
       this.setState({ flex: 'column' });
     } else {
       this.setState({ flex: 'row' });
@@ -506,6 +514,12 @@ class App extends Component {
                         })}
                       </RadioGroup>
                     </FormControl>
+                    <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                      <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                      - Anh/chị vui lòng chủ động mua vé máy bay khứ hồi đến TPHCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ <br />
+                      - Đối với khu vực TPHCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh.
+                    </div>
+                    <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
                     <FormControl component="fieldset" style={{ marginRight: 80 }}>
                       <FormLabel component="legend">Di chuyển chiều đi</FormLabel>
                       <RadioGroup
@@ -521,7 +535,7 @@ class App extends Component {
                             }
                           })
                         }}>
-                        {!this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map(type => {
+                        {!this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map((type, index) => {
                           return (
                             <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
                           )
@@ -532,6 +546,10 @@ class App extends Component {
                           )
                         })}
                       </RadioGroup>
+                      <div style={{ marginBottom: 20, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                        - Xe sẽ đón/trả đoàn tại <span style={{ fontWeight: 'bold' }}>Cung Văn Hoá Lao Động - 55B Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1, TPHCM</span>
+                      </div>
                     </FormControl>
                     <FormControl component="fieldset">
                       <FormLabel component="legend">Di chuyển chiều về</FormLabel>
@@ -559,30 +577,53 @@ class App extends Component {
                           )
                         })}
                       </RadioGroup>
+                      <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                        - Thời gian khởi hành từ sau 12:00 đến 14:00 (linh động khi đủ số lượng khách trên xe)
+                      </div>
                     </FormControl>
                   </div>
-                  <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
-                    <FormControl component="fieldset" style={{ marginRight: 100 }}>
-                      <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
-                      <FormGroup>
-                        {this.state.staySchedules.map((stay, index) => {
-                          return (
-                            <FormControlLabel
-                              control={
-                                <Checkbox disabled={this.state.completed} checked={stay.checked} onChange={() => {
-                                  let staySchedules = this.state.staySchedules;
-                                  staySchedules[index].checked = !staySchedules[index].checked;
-                                  this.setState({
-                                    staySchedules: staySchedules
-                                  })
-                                }} value={stay.name} color="primary" />
-                              }
-                              label={stay.name}
-                            />
-                          )
-                        })}
-                      </FormGroup>
-                    </FormControl>
+                  <div style={{ marginLeft: 20, width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
+                  <FormControl component="fieldset" style={{marginLeft: 20, marginTop: 10, width: '90%'}}>
+                    <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
+                    <div style={{ marginTop: 10, marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                      - Thời gian nhận phòng: sau 15h Thứ Sáu 18/01/2019 <br />
+                      - Thời gian trả phòng: trước 12h Chủ Nhật 19/01/2019
+                      </div>
+                    <FormGroup>
+                      {this.state.staySchedules.map((stay, index) => {
+                        return (
+                          <FormControlLabel
+                            control={
+                              <Checkbox disabled={this.state.completed} checked={stay.checked} onChange={() => {
+                                let staySchedules = this.state.staySchedules;
+                                staySchedules[index].checked = !staySchedules[index].checked;
+                                this.setState({
+                                  staySchedules: staySchedules
+                                })
+                              }} value={stay.name} color="primary" />
+                            }
+                            label={stay.name}
+                          />
+                        )
+                      })}
+                    </FormGroup>
+                  </FormControl>
+                  <div style={{ marginLeft: 20, marginTop: 10, width: '100%', flexDirection: 'row' }}>
+                    <div style={{ marginTop: 20, marginBottom: 20, width: 300 }}>
+                      <Select
+                        isDisabled={this.state.completed}
+                        value={this.state.roommate}
+                        onChange={(selectedOption) => {
+                          this.setState({
+                            roommate: selectedOption
+                          })
+                        }}
+                        options={this.state.eventUsers}
+                        isSearchable={true}
+                        styles={colourStyles}
+                        placeholder="Chọn bạn cùng phòng" />
+                    </div>
                     <FormControl component="fieldset">
                       <FormLabel component="legend">Đăng ký bữa ăn</FormLabel>
                       <FormGroup>
@@ -605,20 +646,6 @@ class App extends Component {
                       </FormGroup>
                     </FormControl>
                   </div>
-                  <div style={{ marginLeft: 20, marginTop: 30, width: 300 }}>
-                    <Select
-                      isDisabled={this.state.completed}
-                      value={this.state.roommate}
-                      onChange={(selectedOption) => {
-                        this.setState({
-                          roommate: selectedOption
-                        })
-                      }}
-                      options={this.state.eventUsers}
-                      isSearchable={true}
-                      styles={colourStyles}
-                      placeholder="Chọn bạn cùng phòng" />
-                  </div>
                 </div>
               )}
               {!this.state.registrationInfo.willJoin && (
@@ -635,7 +662,7 @@ class App extends Component {
                   />
                 </div>
               )}
-              {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 30, textAlign: 'center', flexDirection: 'column'}}>
+              {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 30, textAlign: 'center', flexDirection: 'column' }}>
                 <Button variant="contained" color='primary' size='large' onClick={this.registry}>
                   ĐĂNG KÝ
                 </Button>
@@ -644,7 +671,7 @@ class App extends Component {
                 </div>}
               </div>}
             </div>
-            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin:10}}>
+            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin: 10 }}>
               <VerticalTimeline>
                 {this.state.eventTimelineData.map((event, index) => {
                   return (

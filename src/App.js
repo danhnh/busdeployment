@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './assets/acbLogoBlue.png';
+import logoWhite from './assets/acbLogoWhite.png';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -9,6 +10,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Fab from '@material-ui/core/Fab';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
@@ -437,275 +439,301 @@ class App extends Component {
               message={<span id="message-id">{this.state.errorMessage}</span>}
             />
           </div> :
-          <div style={{ padding: 10, display: 'flex', flexDirection: this.state.flex }}>
-            <div className="App-form">
-              <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60, backgroundColor: '#dbdbdb' }}>
-                <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />
-              </div>
-              <div style={{ marginTop: 10, color: '#1f419b', fontWeight: 'bold', fontSize: '1rem' }}>
-                {this.state.userInfo.updated_full_name}
-              </div>
-              <div style={{ marginTop: 10, color: 'black', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                {this.state.userInfo.job_title}
-              </div>
-              <div style={{ marginTop: 10, color: '#676767', fontSize: '0.9rem' }}>
-                {this.state.userInfo.department}
-              </div>
-              <FormGroup row style={{ marginTop: 10, marginBottom: 10 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled={this.state.completed}
-                      checked={this.state.registrationInfo.willJoin}
-                      color="primary"
-                      onChange={() => {
-                        this.setState({
-                          ...this.state,
-                          registrationInfo: {
-                            ...this.state.registrationInfo,
-                            willJoin: !this.state.registrationInfo.willJoin
-                          }
-                        })
-                      }}
-                      value={this.state.willJoin}
-                    />
-                  }
-                  label="Xác nhận tham dự" />
-              </FormGroup>
-              {this.state.registrationInfo.willJoin && (
-                <div>
-                  <div style={{ width: '80%' }}>
-                    <TextField
-                      id="standard-multiline-flexible"
-                      label="CMND/Căn cước"
-                      disabled={this.state.completed}
-                      style={{ marginLeft: 20, marginRight: 20, width: 300 }}
-                      value={this.state.cmnd}
-                      onChange={this.handleChange('cmnd')}
-                      fullWidth
-                      margin="normal"
-                    />
-                  </div>
-                  <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
-                    <FormControl component="fieldset" style={{ marginRight: 80 }}>
-                      <FormLabel component="legend">Nơi lưu trú</FormLabel>
-                      <RadioGroup
-                        aria-label="Nơi lưu trú:"
-                        name="transLocation"
-                        value={this.state.registrationInfo ? this.state.registrationInfo.location : ""}
-                        onChange={(value) => {
+          <div>
+            <div style={{position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex'}}>
+              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900">
+                Hotline chung
+                <br/>
+                Vũ Diệu Ly 0918131900
+              </Fab>
+              <br/>
+              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846">
+                Hotline phòng
+                <br/>
+                Nguyễn Việt An 0779933846
+              </Fab>
+            </div>
+            
+            <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', backgroundColor: '#072790' }}>
+              <img src={logoWhite} style={{ height: 80, marginLeft: 15 }} alt="logo" />
+              <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 20 }}>TRIỂN KHAI KINH DOANH 2019</span>
+              <Button color="primary" style={{ position: 'absolute', right: 10, color: 'white', fontWeight: 500 }} onClick={() => {
+                window.location.reload();
+              }}>
+                Đăng xuất
+              </Button>
+            </div>
+            <div style={{ padding: 10, display: 'flex', flexDirection: this.state.flex }}>
+              <div className="App-form">
+                <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60, backgroundColor: '#dbdbdb' }}>
+                  <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />
+                </div>
+                <div style={{ marginTop: 10, color: '#1f419b', fontWeight: 'bold', fontSize: '1rem' }}>
+                  {this.state.userInfo.updated_full_name}
+                </div>
+                <div style={{ marginTop: 10, color: 'black', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                  {this.state.userInfo.job_title}
+                </div>
+                <div style={{ marginTop: 10, color: '#676767', fontSize: '0.9rem' }}>
+                  {this.state.userInfo.department}
+                </div>
+                <FormGroup row style={{ marginTop: 10, marginBottom: 10 }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        disabled={this.state.completed}
+                        checked={this.state.registrationInfo.willJoin}
+                        color="primary"
+                        onChange={() => {
                           this.setState({
                             ...this.state,
                             registrationInfo: {
                               ...this.state.registrationInfo,
-                              location: value.target.value
+                              willJoin: !this.state.registrationInfo.willJoin
                             }
-                          })
-                        }}>
-                        {!this.state.completed && this.state.locations && this.state.locations.map(type => {
-                          return (
-                            <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
-                          )
-                        })}
-                        {this.state.completed && this.state.locations && this.state.locations.map(type => {
-                          return (
-                            <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.location} color="primary" />} label={type} />
-                          )
-                        })}
-                      </RadioGroup>
-                    </FormControl>
-                    <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                      <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                      - Anh/chị vui lòng chủ động mua vé máy bay khứ hồi đến TPHCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ <br />
-                      - Đối với khu vực TPHCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh.
-                    </div>
-                    <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
-                    <FormControl component="fieldset" style={{ marginRight: 80 }}>
-                      <FormLabel component="legend">Di chuyển chiều đi</FormLabel>
-                      <RadioGroup
-                        aria-label="Di chuyển chiều đi"
-                        name="transTypeDeparture"
-                        value={this.state.registrationInfo ? this.state.registrationInfo.transportationDeparture : ""}
-                        onChange={(value) => {
-                          this.setState({
-                            ...this.state,
-                            registrationInfo: {
-                              ...this.state.registrationInfo,
-                              transportationDeparture: value.target.value
-                            }
-                          })
-                        }}>
-                        {!this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map((type, index) => {
-                          return (
-                            <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
-                          )
-                        })}
-                        {this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map(type => {
-                          return (
-                            <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.transportationDeparture} color="primary" />} label={type} />
-                          )
-                        })}
-                      </RadioGroup>
-                      <div style={{ marginBottom: 20, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                        - Xe sẽ đón/trả đoàn tại <span style={{ fontWeight: 'bold' }}>Cung Văn Hoá Lao Động - 55B Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1, TPHCM</span>
-                      </div>
-                    </FormControl>
-                    <FormControl component="fieldset">
-                      <FormLabel component="legend">Di chuyển chiều về</FormLabel>
-                      <RadioGroup
-                        aria-label="Chọn phương thức di chuyển chiều về"
-                        name="transTypeArrive"
-                        value={this.state.registrationInfo ? this.state.registrationInfo.transportationArrive : ""}
-                        onChange={(value) => {
-                          this.setState({
-                            ...this.state,
-                            registrationInfo: {
-                              ...this.state.registrationInfo,
-                              transportationArrive: value.target.value
-                            }
-                          })
-                        }}>
-                        {!this.state.completed && this.state.transTypesArrive && this.state.transTypesArrive.map(type => {
-                          return (
-                            <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
-                          )
-                        })}
-                        {this.state.completed && this.state.transTypesArrive && this.state.transTypesArrive.map(type => {
-                          return (
-                            <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.transportationArrive} color="primary" />} label={type} />
-                          )
-                        })}
-                      </RadioGroup>
-                      <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                        - Thời gian khởi hành từ sau 12:00 đến 14:00 (linh động khi đủ số lượng khách trên xe)
-                      </div>
-                    </FormControl>
-                  </div>
-                  <div style={{ marginLeft: 20, width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
-                  <FormControl component="fieldset" style={{marginLeft: 20, marginTop: 10, width: '90%'}}>
-                    <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
-                    <div style={{ marginTop: 10, marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                      - Thời gian nhận phòng: sau 15h Thứ Sáu 18/01/2019 <br />
-                      - Thời gian trả phòng: trước 12h Chủ Nhật 19/01/2019
-                      </div>
-                    <FormGroup>
-                      {this.state.staySchedules.map((stay, index) => {
-                        return (
-                          <FormControlLabel
-                            control={
-                              <Checkbox disabled={this.state.completed} checked={stay.checked} onChange={() => {
-                                let staySchedules = this.state.staySchedules;
-                                staySchedules[index].checked = !staySchedules[index].checked;
-                                this.setState({
-                                  staySchedules: staySchedules
-                                })
-                              }} value={stay.name} color="primary" />
-                            }
-                            label={stay.name}
-                          />
-                        )
-                      })}
-                    </FormGroup>
-                  </FormControl>
-                  <div style={{ marginLeft: 20, marginTop: 10, width: '100%', flexDirection: 'row' }}>
-                    <div style={{ marginTop: 20, marginBottom: 20, width: 300 }}>
-                      <Select
-                        isDisabled={this.state.completed}
-                        value={this.state.roommate}
-                        onChange={(selectedOption) => {
-                          this.setState({
-                            roommate: selectedOption
                           })
                         }}
-                        options={this.state.eventUsers}
-                        isSearchable={true}
-                        styles={colourStyles}
-                        placeholder="Chọn bạn cùng phòng" />
+                        value={this.state.willJoin}
+                      />
+                    }
+                    label="Xác nhận tham dự" />
+                </FormGroup>
+                {this.state.registrationInfo.willJoin && (
+                  <div>
+                    <div style={{ width: '80%' }}>
+                      <TextField
+                        id="standard-multiline-flexible"
+                        label="CMND/Căn cước"
+                        disabled={this.state.completed}
+                        style={{ marginLeft: 20, marginRight: 20, width: 300 }}
+                        value={this.state.cmnd}
+                        onChange={this.handleChange('cmnd')}
+                        fullWidth
+                        margin="normal"
+                      />
                     </div>
-                    <FormControl component="fieldset">
-                      <FormLabel component="legend">Đăng ký bữa ăn</FormLabel>
+                    <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
+                      <FormControl component="fieldset" style={{ marginRight: 80 }}>
+                        <FormLabel component="legend">Nơi lưu trú</FormLabel>
+                        <RadioGroup
+                          aria-label="Nơi lưu trú:"
+                          name="transLocation"
+                          value={this.state.registrationInfo ? this.state.registrationInfo.location : ""}
+                          onChange={(value) => {
+                            this.setState({
+                              ...this.state,
+                              registrationInfo: {
+                                ...this.state.registrationInfo,
+                                location: value.target.value
+                              }
+                            })
+                          }}>
+                          {!this.state.completed && this.state.locations && this.state.locations.map(type => {
+                            return (
+                              <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
+                            )
+                          })}
+                          {this.state.completed && this.state.locations && this.state.locations.map(type => {
+                            return (
+                              <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.location} color="primary" />} label={type} />
+                            )
+                          })}
+                        </RadioGroup>
+                      </FormControl>
+                      <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                        - Anh/chị vui lòng chủ động mua vé máy bay khứ hồi đến TPHCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ <br />
+                        - Đối với khu vực TPHCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh.
+                    </div>
+                      <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
+                      <FormControl component="fieldset" style={{ marginRight: 80 }}>
+                        <FormLabel component="legend">Di chuyển chiều đi</FormLabel>
+                        <RadioGroup
+                          aria-label="Di chuyển chiều đi"
+                          name="transTypeDeparture"
+                          value={this.state.registrationInfo ? this.state.registrationInfo.transportationDeparture : ""}
+                          onChange={(value) => {
+                            this.setState({
+                              ...this.state,
+                              registrationInfo: {
+                                ...this.state.registrationInfo,
+                                transportationDeparture: value.target.value
+                              }
+                            })
+                          }}>
+                          {!this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map((type, index) => {
+                            return (
+                              <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
+                            )
+                          })}
+                          {this.state.completed && this.state.transTypesDeparture && this.state.transTypesDeparture.map(type => {
+                            return (
+                              <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.transportationDeparture} color="primary" />} label={type} />
+                            )
+                          })}
+                        </RadioGroup>
+                        <div style={{ marginBottom: 20, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                          <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                          - Xe sẽ đón/trả đoàn tại <span style={{ fontWeight: 'bold' }}>Cung Văn Hoá Lao Động - 55B Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1, TPHCM</span>
+                        </div>
+                      </FormControl>
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">Di chuyển chiều về</FormLabel>
+                        <RadioGroup
+                          aria-label="Chọn phương thức di chuyển chiều về"
+                          name="transTypeArrive"
+                          value={this.state.registrationInfo ? this.state.registrationInfo.transportationArrive : ""}
+                          onChange={(value) => {
+                            this.setState({
+                              ...this.state,
+                              registrationInfo: {
+                                ...this.state.registrationInfo,
+                                transportationArrive: value.target.value
+                              }
+                            })
+                          }}>
+                          {!this.state.completed && this.state.transTypesArrive && this.state.transTypesArrive.map(type => {
+                            return (
+                              <FormControlLabel value={type} control={<Radio color="primary" />} label={type} />
+                            )
+                          })}
+                          {this.state.completed && this.state.transTypesArrive && this.state.transTypesArrive.map(type => {
+                            return (
+                              <FormControlLabel disabled value={type} control={<Radio checked={type === this.state.registrationInfo.transportationArrive} color="primary" />} label={type} />
+                            )
+                          })}
+                        </RadioGroup>
+                        <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                          <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
+                          - Thời gian khởi hành từ sau 12:00 đến 14:00 (linh động khi đủ số lượng khách trên xe)
+                      </div>
+                      </FormControl>
+                    </div>
+                    <div style={{ marginLeft: 20, width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
+                    <FormControl component="fieldset" style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
+                      <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
+                      <div style={{ marginTop: 10, marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
+                        - Thời gian nhận phòng: sau 15h Thứ Sáu 18/01/2019 <br />
+                        - Thời gian trả phòng: trước 12h Chủ Nhật 19/01/2019
+                      </div>
                       <FormGroup>
-                        {this.state.eatSchedules.map((eat, index) => {
+                        {this.state.staySchedules.map((stay, index) => {
                           return (
                             <FormControlLabel
                               control={
-                                <Checkbox disabled={this.state.completed} checked={eat.checked} onChange={() => {
-                                  let eatSchedules = this.state.eatSchedules;
-                                  eatSchedules[index].checked = !eatSchedules[index].checked;
+                                <Checkbox disabled={this.state.completed} checked={stay.checked} onChange={() => {
+                                  let staySchedules = this.state.staySchedules;
+                                  staySchedules[index].checked = !staySchedules[index].checked;
                                   this.setState({
-                                    eatSchedules: eatSchedules
+                                    staySchedules: staySchedules
                                   })
-                                }} value={eat.checked} color="primary" />
+                                }} value={stay.name} color="primary" />
                               }
-                              label={eat.name}
+                              label={stay.name}
                             />
                           )
                         })}
                       </FormGroup>
                     </FormControl>
+                    <div style={{ marginLeft: 20, marginTop: 10, width: '100%', flexDirection: 'row' }}>
+                      <div style={{ marginTop: 20, marginBottom: 20, width: 300 }}>
+                        <Select
+                          isDisabled={this.state.completed}
+                          value={this.state.roommate}
+                          onChange={(selectedOption) => {
+                            this.setState({
+                              roommate: selectedOption
+                            })
+                          }}
+                          options={this.state.eventUsers}
+                          isSearchable={true}
+                          styles={colourStyles}
+                          placeholder="Chọn bạn cùng phòng" />
+                      </div>
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">Đăng ký bữa ăn</FormLabel>
+                        <FormGroup>
+                          {this.state.eatSchedules.map((eat, index) => {
+                            return (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox disabled={this.state.completed} checked={eat.checked} onChange={() => {
+                                    let eatSchedules = this.state.eatSchedules;
+                                    eatSchedules[index].checked = !eatSchedules[index].checked;
+                                    this.setState({
+                                      eatSchedules: eatSchedules
+                                    })
+                                  }} value={eat.checked} color="primary" />
+                                }
+                                label={eat.name}
+                              />
+                            )
+                          })}
+                        </FormGroup>
+                      </FormControl>
+                    </div>
                   </div>
-                </div>
-              )}
-              {!this.state.registrationInfo.willJoin && (
-                <div style={{ width: 400 }}>
-                  <TextField
-                    id="standard-multiline-flexible-more"
-                    label="Lý do từ chối"
-                    multiline
-                    disabled={this.state.completed}
-                    value={this.state.reason}
-                    onChange={this.handleChange('reason')}
-                    fullWidth
-                    margin="normal"
-                  />
-                </div>
-              )}
-              {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 30, textAlign: 'center', flexDirection: 'column' }}>
-                <Button variant="contained" color='primary' size='large' onClick={this.registry}>
-                  ĐĂNG KÝ
+                )}
+                {!this.state.registrationInfo.willJoin && (
+                  <div style={{ width: 400 }}>
+                    <TextField
+                      id="standard-multiline-flexible-more"
+                      label="Lý do từ chối"
+                      multiline
+                      disabled={this.state.completed}
+                      value={this.state.reason}
+                      onChange={this.handleChange('reason')}
+                      fullWidth
+                      margin="normal"
+                    />
+                  </div>
+                )}
+                {!this.state.completed && <div style={{ marginTop: 30, marginBottom: 30, textAlign: 'center', flexDirection: 'column' }}>
+                  <Button variant="contained" color='primary' size='large' onClick={this.registry}>
+                    ĐĂNG KÝ
                 </Button>
-                {this.state.showError && <div className="App-error">
-                  <span>{this.state.errorMessage}</span>
+                  {this.state.showError && <div className="App-error">
+                    <span>{this.state.errorMessage}</span>
+                  </div>}
                 </div>}
-              </div>}
+              </div>
+              <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin: 10 }}>
+                <VerticalTimeline>
+                  {this.state.eventTimelineData.map((event, index) => {
+                    return (
+                      <VerticalTimelineElement
+                        className="vertical-timeline-element-work"
+                        date={`${event.date}\n${event.time}`}
+                        iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
+                        icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
+                        <h3 className="vertical-timeline-element-title">{event.title}</h3>
+                        <p>
+                          {event.description}
+                        </p>
+                      </VerticalTimelineElement>
+                    )
+                  })}
+                </VerticalTimeline>
+              </div>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={this.state.showError}
+                autoHideDuration={5000}
+                onClose={() => {
+                  this.setState({
+                    showError: false
+                  })
+                }}
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{this.state.errorMessage}</span>}
+              />
             </div>
-            <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin: 10 }}>
-              <VerticalTimeline>
-                {this.state.eventTimelineData.map((event, index) => {
-                  return (
-                    <VerticalTimelineElement
-                      className="vertical-timeline-element-work"
-                      date={`${event.date}\n${event.time}`}
-                      iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
-                      icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
-                      <h3 className="vertical-timeline-element-title">{event.title}</h3>
-                      <p>
-                        {event.description}
-                      </p>
-                    </VerticalTimelineElement>
-                  )
-                })}
-              </VerticalTimeline>
-            </div>
-            <Snackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={this.state.showError}
-              autoHideDuration={5000}
-              onClose={() => {
-                this.setState({
-                  showError: false
-                })
-              }}
-              ContentProps={{
-                'aria-describedby': 'message-id',
-              }}
-              message={<span id="message-id">{this.state.errorMessage}</span>}
-            />
+
           </div>
     );
   }

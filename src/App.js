@@ -90,7 +90,9 @@ class App extends Component {
       reason: "",
       cmnd: "",
       completed: false,
-      flex: 'column'
+      flex: 'column',
+      showSummary: true,
+      showDetail: true
     }
   }
 
@@ -152,30 +154,22 @@ class App extends Component {
     firebase.database().ref('TransportationTypeArriveTypes').once('value').then(snapshot => {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
-      let transporationTypesDataNote = [];
       transportationTypes.forEach((transType) => {
-        transporationTypesData.push(transType.name);
-        transporationTypesDataNote.push(transType.note);
+        transporationTypesData.push(transType.name + ' ' + transType.note);
       });
       this.setState({
-        ...this.state,
-        transTypesArrive: transporationTypesData,
-        transTypesArriveNote: transporationTypesDataNote
+        transTypesArrive: transporationTypesData
       })
     });
 
     firebase.database().ref('TransportationTypeDepartureTypes').once('value').then(snapshot => {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
-      let transporationTypesDataNote = [];
       transportationTypes.forEach((transType) => {
-        transporationTypesData.push(transType.name);
-        transporationTypesDataNote.push(transType.note);
+        transporationTypesData.push(transType.name + ' ' + transType.note);
       });
       this.setState({
-        ...this.state,
-        transTypesDeparture: transporationTypesData,
-        transTypesDepartureNote: transporationTypesDataNote
+        transTypesDeparture: transporationTypesData
       })
     });
   }
@@ -279,25 +273,25 @@ class App extends Component {
     if (this.state.registrationInfo.willJoin && (this.state.registrationInfo.transportationDeparture == null || this.state.registrationInfo.transportationArrive === null || this.state.registrationInfo.location === null)) {
       this.setState({
         ...this.state,
-        errorMessage: 'Xin vui lòng chọn phương tiện di chuyển đi/về và nơi cư trú hiện tại.',
+        errorMessage: 'Anh/Chị xin vui lòng chọn phương tiện di chuyển đi/về và nơi cư trú hiện tại.',
         showError: true
       })
     } else if (!this.state.registrationInfo.willJoin && this.state.reason === "") {
       this.setState({
         ...this.state,
-        errorMessage: 'Xin vui lòng nhập lý do không tham dự sự kiện.',
+        errorMessage: 'Anh/Chị xin vui lòng nhập lý do không tham dự sự kiện.',
         showError: true
       })
     } else if (this.state.registrationInfo.willJoin && this.state.cmnd === "") {
       this.setState({
         ...this.state,
-        errorMessage: 'Xin vui lòng nhập số CMND / Căn cước.',
+        errorMessage: 'Anh/Chị xin vui lòng nhập số CMND / Căn cước.',
         showError: true
       })
     } else if (this.state.registrationInfo.willJoin && this.state.roommate !== undefined && this.state.roommate.value === this.state.userInfo.updated_full_name) {
       this.setState({
         ...this.state,
-        errorMessage: 'Vui lòng chọn bạn cùng phòng khác.',
+        errorMessage: 'Anh/Chị vui lòng chọn bạn cùng phòng khác.',
         showError: true
       })
     } else {
@@ -405,7 +399,7 @@ class App extends Component {
           <div className="App">
             <header className="App-header">
               <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">TRIỂN KHAI KINH DOANH 2019</h1>
+              <h1 style={{ color: '#264295', marginBottom: 20, maxWidth: '80%', fontSize: 50 }}>TRIỂN KHAI KINH DOANH 2019</h1>
               <OauthSender
                 authorizeUrl="https://www.yammer.com/oauth2/authorize"
                 clientId={clientId}
@@ -440,23 +434,22 @@ class App extends Component {
             />
           </div> :
           <div>
-            <div style={{position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex'}}>
+            <div style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex' }}>
               <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900">
-                Hotline chung
-                <br/>
+                <strong>Hotline chung:</strong>
+                <div style={{ marginRight: 15 }}></div>
                 Vũ Diệu Ly 0918131900
               </Fab>
-              <br/>
+              <br />
               <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846">
-                Hotline phòng
-                <br/>
+                <strong>Hotline phòng:</strong>
+                <div style={{ marginRight: 15 }}></div>
                 Nguyễn Việt An 0779933846
               </Fab>
             </div>
-            
             <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', backgroundColor: '#072790' }}>
               <img src={logoWhite} style={{ height: 80, marginLeft: 15 }} alt="logo" />
-              <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 20 }}>TRIỂN KHAI KINH DOANH 2019</span>
+              {this.state.flex === 'row' && <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 20 }}>TRIỂN KHAI KINH DOANH 2019</span>}
               <Button color="primary" style={{ position: 'absolute', right: 10, color: 'white', fontWeight: 500 }} onClick={() => {
                 window.location.reload();
               }}>
@@ -477,6 +470,42 @@ class App extends Component {
                 <div style={{ marginTop: 10, color: '#676767', fontSize: '0.9rem' }}>
                   {this.state.userInfo.department}
                 </div>
+                <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: 'black' }}>
+                  <strong style={{ marginTop: 10, marginBottom: 10 }}>HƯỚNG DẪN</strong>
+                  <div>Anh/Chị vui lòng nhấp chọn <Switch
+                    color="primary"
+                    onChange={() => {
+                      this.setState({
+                        temp: !this.state.temp
+                      })
+                    }}
+                    value={this.state.temp}
+                  /> để xác nhận tham dự sự kiện</div>
+                  <div>
+                    <Switch
+                      disabled={true}
+                      checked={false}
+                      color="primary"
+                      onChange={() => {
+
+                      }}
+                      value={false}
+                    />
+                    Từ chối tham gia sự kiện
+                  </div>
+                  <div>
+                    <Switch
+                      checked={true}
+                      color="primary"
+                      onChange={() => {
+
+                      }}
+                      value={true}
+                    />
+                    Đồng ý tham gia sự kiện
+                  </div>
+                </div>
+                <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
                 <FormGroup row style={{ marginTop: 10, marginBottom: 10 }}>
                   <FormControlLabel
                     control={
@@ -493,19 +522,19 @@ class App extends Component {
                             }
                           })
                         }}
-                        value={this.state.willJoin}
+                        value={this.state.registrationInfo.willJoin}
                       />
                     }
-                    label="Xác nhận tham dự" />
+                    label={this.state.registrationInfo.willJoin ? "Đồng ý tham gia sự kiện" : "Từ chối tham gia sự kiện"} />
                 </FormGroup>
                 {this.state.registrationInfo.willJoin && (
                   <div>
                     <div style={{ width: '80%' }}>
                       <TextField
                         id="standard-multiline-flexible"
-                        label="CMND/Căn cước"
+                        label="Anh/Chị vui lòng nhập CMND/Căn cước"
                         disabled={this.state.completed}
-                        style={{ marginLeft: 20, marginRight: 20, width: 300 }}
+                        style={{ marginLeft: 20, marginRight: 20, width: 500 }}
                         value={this.state.cmnd}
                         onChange={this.handleChange('cmnd')}
                         fullWidth
@@ -514,7 +543,7 @@ class App extends Component {
                     </div>
                     <div style={{ marginLeft: 20, marginTop: 30, width: '100%' }}>
                       <FormControl component="fieldset" style={{ marginRight: 80 }}>
-                        <FormLabel component="legend">Nơi lưu trú</FormLabel>
+                        <FormLabel component="legend">Nơi cư trú hiện tại của anh/chị</FormLabel>
                         <RadioGroup
                           aria-label="Nơi lưu trú:"
                           name="transLocation"
@@ -540,14 +569,9 @@ class App extends Component {
                           })}
                         </RadioGroup>
                       </FormControl>
-                      <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                        <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                        - Anh/chị vui lòng chủ động mua vé máy bay khứ hồi đến TPHCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ <br />
-                        - Đối với khu vực TPHCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh.
-                    </div>
-                      <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
-                      <FormControl component="fieldset" style={{ marginRight: 80 }}>
-                        <FormLabel component="legend">Di chuyển chiều đi</FormLabel>
+                      <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
+                      <FormControl component="fieldset" style={{ marginRight: 10 }}>
+                        <FormLabel component="legend">Anh/Chị vui lòng đăng ký hình thức di chuyển chiều đi</FormLabel>
                         <RadioGroup
                           aria-label="Di chuyển chiều đi"
                           name="transTypeDeparture"
@@ -572,13 +596,9 @@ class App extends Component {
                             )
                           })}
                         </RadioGroup>
-                        <div style={{ marginBottom: 20, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                          <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                          - Xe sẽ đón/trả đoàn tại <span style={{ fontWeight: 'bold' }}>Cung Văn Hoá Lao Động - 55B Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1, TPHCM</span>
-                        </div>
                       </FormControl>
-                      <FormControl component="fieldset">
-                        <FormLabel component="legend">Di chuyển chiều về</FormLabel>
+                      <FormControl component="fieldset" style={{ marginRight: 10 }}>
+                        <FormLabel component="legend">Anh/Chị vui lòng đăng ký hình thức di chuyển chiều về</FormLabel>
                         <RadioGroup
                           aria-label="Chọn phương thức di chuyển chiều về"
                           name="transTypeArrive"
@@ -603,19 +623,11 @@ class App extends Component {
                             )
                           })}
                         </RadioGroup>
-                        <div style={{ marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                          <span style={{ fontWeight: 'bold' }}>Ghi chú:</span><br />
-                          - Thời gian khởi hành từ sau 12:00 đến 14:00 (linh động khi đủ số lượng khách trên xe)
-                      </div>
                       </FormControl>
                     </div>
                     <div style={{ marginLeft: 20, width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
                     <FormControl component="fieldset" style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
-                      <FormLabel component="legend">Xác nhận lưu trú</FormLabel>
-                      <div style={{ marginTop: 10, marginBottom: 10, color: '#1f419b', width: '90%', fontSize: 13, textAlign: "justify" }}>
-                        - Thời gian nhận phòng: sau 15h Thứ Sáu 18/01/2019 <br />
-                        - Thời gian trả phòng: trước 12h Chủ Nhật 19/01/2019
-                      </div>
+                      <FormLabel component="legend">Anh/Chị vui lòng đăng ký phòng lưu trú</FormLabel>
                       <FormGroup>
                         {this.state.staySchedules.map((stay, index) => {
                           return (
@@ -650,8 +662,9 @@ class App extends Component {
                           styles={colourStyles}
                           placeholder="Chọn bạn cùng phòng" />
                       </div>
+                      <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
                       <FormControl component="fieldset">
-                        <FormLabel component="legend">Đăng ký bữa ăn</FormLabel>
+                        <FormLabel component="legend">Anh/Chị vui lòng đăng ký bữa ăn</FormLabel>
                         <FormGroup>
                           {this.state.eatSchedules.map((eat, index) => {
                             return (
@@ -675,10 +688,10 @@ class App extends Component {
                   </div>
                 )}
                 {!this.state.registrationInfo.willJoin && (
-                  <div style={{ width: 400 }}>
+                  <div style={{ width: '80%', marginLeft: 20, marginRight: 20 }}>
                     <TextField
                       id="standard-multiline-flexible-more"
-                      label="Lý do từ chối"
+                      label="Anh/Chị vui lòng nhập lý do từ chối"
                       multiline
                       disabled={this.state.completed}
                       value={this.state.reason}
@@ -697,23 +710,106 @@ class App extends Component {
                   </div>}
                 </div>}
               </div>
-              <div style={{ flex: 2, backgroundColor: '#f7f7f7', margin: 10 }}>
-                <VerticalTimeline>
-                  {this.state.eventTimelineData.map((event, index) => {
-                    return (
-                      <VerticalTimelineElement
-                        className="vertical-timeline-element-work"
-                        date={`${event.date}\n${event.time}`}
-                        iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
-                        icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
-                        <h3 className="vertical-timeline-element-title">{event.title}</h3>
-                        <p>
-                          {event.description}
-                        </p>
-                      </VerticalTimelineElement>
-                    )
-                  })}
-                </VerticalTimeline>
+              <div style={{ flex: 2, margin: 10, backgroundColor: '#f7f7f7' }}>
+                <Button style={{ backgroundColor: '#1f419b', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                  onClick={() => {
+                    this.setState({
+                      showSummary: !this.state.showSummary
+                    })
+                  }}>
+                  Thông tin chung
+                </Button>
+                {this.state.showSummary &&
+                  <div style={{margin: 20}}>
+                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10}}>HỘI NGHỊ TRIỂN KHAI KINH DOANH 2019</div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Thời gian:</strong> Ngày 18 – 19 – 20.01.2019
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Địa điểm:</strong> The Grand Hồ Tràm Strip
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Địa chỉ:</strong> Ven Biển, Phước Thuận, Xuyên Mộc, Bà Rịa - Vũng Tàu
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Thông tin di chuyển:</strong>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <ul>
+                        <li style={{ marginBottom: 5}}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
+                        <li style={{ marginBottom: 5}}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
+                        <li style={{ marginBottom: 5}}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>09:00</strong> và <strong>10:00</strong></li>
+                        <li style={{ marginBottom: 5}}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
+                        <li style={{ marginBottom: 5}}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
+                        <li style={{ marginBottom: 5}}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Thông tin về bữa ăn:</strong>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <ul>
+                        <li style={{ marginBottom: 5}}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
+                          <ul>
+                            <li>Bữa ăn trưa 18.01.2019 tại khách sạn từ 12h – 14h</li>
+                            <li>Bữa ăn tối 18.01.2019 tại khách sạn từ 18h – 21h</li>
+                            <li>Bữa ăn trưa 20.01.2019 tại khách sạn từ 12h – 14h</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Thông tin về trang phục:</strong>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <ul>
+                        <li style={{ marginBottom: 5}}>Ngày 18.01 & 19.01.2019:
+                          <ul>
+                            <li>Nam: Áo sơ mi ACB, quần tây</li>
+                            <li>Nữ: Váy & vest ACB</li>
+                          </ul>
+                        </li>
+                        <li style={{ marginBottom: 5}}>Gala tôn vinh:
+                          <ul>
+                            <li>Nam: Trang phục tiệc lịch sự, trang trọng</li>
+                            <li>Nữ: Váy dạ hội</li>
+                          </ul>
+                        </li>
+                        <li style={{ marginBottom: 5}}>Ngày 20.01: Áo thun ACB
+                        </li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10}}>
+                      <strong>Để biết thêm thông tin chi tiết, anh/ chị vui lòng liên hệ Hotline của BTC</strong>
+                    </div>
+                  </div>
+                }
+                <Button style={{ backgroundColor: '#1f419b', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                  onClick={() => {
+                    this.setState({
+                      showDetail: !this.state.showDetail
+                    })
+                  }}>
+                  Lịch trình chi tiết
+                </Button>
+                {this.state.showDetail &&
+                  <VerticalTimeline>
+                    {this.state.eventTimelineData.map((event, index) => {
+                      return (
+                        <VerticalTimelineElement
+                          className="vertical-timeline-element-work"
+                          date={`${event.date}\n${event.time}`}
+                          iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
+                          icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
+                          <h3 className="vertical-timeline-element-title">{event.title}</h3>
+                          <p>
+                            {event.description}
+                          </p>
+                        </VerticalTimelineElement>
+                      )
+                    })}
+                  </VerticalTimeline>
+                }
               </div>
               <Snackbar
                 anchorOrigin={{

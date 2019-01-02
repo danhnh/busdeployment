@@ -436,20 +436,14 @@ class App extends Component {
           </div> :
           <div>
             <div style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex' }}>
-              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900" style={{textTransform: 'none', fontSize: 16,}}>
-                <strong>Hotline chung:</strong>
-                <div style={{ marginRight: 15 }}></div>
-                Vũ Diệu Ly 0918131900
-                </Fab>
-              <br />
-              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846" style={{
+              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900" style={{
                 boxShadow: 'none',
                 textTransform: 'none',
                 fontSize: 16,
                 padding: '6px 12px',
                 border: '1px solid',
-                backgroundColor: '#007bff',
-                borderColor: '#007bff',
+                backgroundColor: '#00b7ee',
+                borderColor: '#00b7ee',
                 fontFamily: [
                   '-apple-system',
                   'BlinkMacSystemFont',
@@ -463,16 +457,54 @@ class App extends Component {
                   '"Segoe UI Symbol"',
                 ].join(','),
                 '&:hover': {
-                  backgroundColor: '#0069d9',
-                  borderColor: '#0062cc',
+                  backgroundColor: '#00b7ee',
+                  borderColor: '#00b7ee',
                 },
                 '&:active': {
                   boxShadow: 'none',
-                  backgroundColor: '#0062cc',
-                  borderColor: '#005cbf',
+                  backgroundColor: '#00b7ee',
+                  borderColor: '#00b7ee',
                 },
                 '&:focus': {
-                  boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+                  boxShadow: '0 0 0 0.2rem #00b7ee',
+                },
+              }}>
+                <strong>Hotline chung:</strong>
+                <div style={{ marginRight: 15 }}></div>
+                Vũ Diệu Ly 0918131900
+                </Fab>
+              <br />
+              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846" style={{
+                boxShadow: 'none',
+                textTransform: 'none',
+                fontSize: 16,
+                padding: '6px 12px',
+                border: '1px solid',
+                backgroundColor: '#a6ce38',
+                borderColor: '#a6ce38',
+                fontFamily: [
+                  '-apple-system',
+                  'BlinkMacSystemFont',
+                  '"Segoe UI"',
+                  'Roboto',
+                  '"Helvetica Neue"',
+                  'Arial',
+                  'sans-serif',
+                  '"Apple Color Emoji"',
+                  '"Segoe UI Emoji"',
+                  '"Segoe UI Symbol"',
+                ].join(','),
+                '&:hover': {
+                  backgroundColor: '#a6ce38',
+                  borderColor: '#a6ce38',
+                },
+                '&:active': {
+                  boxShadow: 'none',
+                  backgroundColor: '#a6ce38',
+                  borderColor: '#a6ce38',
+                },
+                '&:focus': {
+                  boxShadow: '0 0 0 0.2rem #a6ce38',
                 },
               }}>
                 <strong>Hotline phòng:</strong>
@@ -503,8 +535,8 @@ class App extends Component {
                 <div style={{ marginTop: 10, color: '#676767', fontSize: '0.9rem' }}>
                   {this.state.userInfo.department}
                 </div>
-                <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: 'black', backgroundColor: '#DAE7F2' }}>
-                  <strong style={{ marginTop: 10, marginBottom: 10 }}>HƯỚNG DẪN</strong>
+                <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: '#1f419b', backgroundColor: '#DAE7F2' }}>
+                  <strong style={{ marginTop: 10, marginBottom: 10}}>HƯỚNG DẪN</strong>
                   <div>Anh/Chị vui lòng nhấp chọn <Switch
                     color="primary"
                     disabled={true}
@@ -754,7 +786,7 @@ class App extends Component {
                   Thông tin chung
                 </Button>
                 {this.state.showSummary &&
-                  <div style={{ margin: 20 }}>
+                  <div style={{ margin: 20, color: '#20419A'}}>
                     <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>HỘI NGHỊ TRIỂN KHAI KINH DOANH 2019</div>
                     <div style={{ marginBottom: 10 }}>
                       <strong>Thời gian:</strong> Ngày 18 – 19 – 20.01.2019
@@ -766,16 +798,26 @@ class App extends Component {
                       <strong>Địa chỉ:</strong> Ven Biển, Phước Thuận, Xuyên Mộc, Bà Rịa - Vũng Tàu
                     </div>
                     <div style={{ marginBottom: 10 }}>
-                      <strong>Thông tin di chuyển:</strong>
+                      <strong>Thông tin về di chuyển:</strong>
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
                         <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
-                        <li style={{ marginBottom: 5 }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
-                        <li style={{ marginBottom: 5 }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
                         <li style={{ marginBottom: 5 }}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
                         <li style={{ marginBottom: 5 }}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>Thông tin về phòng lưu trú:</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <ul>
+                        <li style={{ marginBottom: 5 }}>BTC sắp xếp lưu trú cho các anh chị tại The Grand Hồ Tràm Strip vào 2 đêm 19.01 & 20.01 (2 khách/ phòng). Nếu có yêu cầu về người ở cùng, anh chị vui lòng trao đổi thống nhất trước và đăng ký trong mục Đăng ký</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian nhận phòng: sau 15h Thứ Sáu, ngày 18.01.2018</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian trả phòng: trước 12h Chủ Nhật, ngày 20.01.2018</li>
                       </ul>
                     </div>
                     <div style={{ marginBottom: 10 }}>
@@ -784,7 +826,7 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li style={{ marginBottom: 5 }}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
-                          <ul>
+                          <ul style={{ color:'#27ae60' , fontWeight:'bold'}}>
                             <li>Bữa ăn trưa 18.01.2019 tại khách sạn từ 12h – 14h</li>
                             <li>Bữa ăn tối 18.01.2019 tại khách sạn từ 18h – 21h</li>
                             <li>Bữa ăn trưa 20.01.2019 tại khách sạn từ 12h – 14h</li>
@@ -797,19 +839,20 @@ class App extends Component {
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5 }}>Ngày 18.01 & 19.01.2019:
-                          <ul>
+                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Ngày 18.01 & 19.01.2019:
+                          <ul style={{ color: '#1f419b', fontWeight: 'normal'}}>
                             <li>Nam: Áo sơ mi ACB, quần tây</li>
                             <li>Nữ: Váy & vest ACB</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5 }}>Gala tôn vinh:
-                          <ul>
+                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Gala tôn vinh:
+                          <ul style={{ color: '#1f419b', fontWeight: 'normal'}}>
                             <li>Nam: Trang phục tiệc lịch sự, trang trọng</li>
                             <li>Nữ: Váy dạ hội</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5 }}>Ngày 20.01: Áo thun ACB
+                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Ngày 20.01:
+                          <span style={{ color: '#1f419b', fontWeight: 'normal'}}>Áo thun ACB</span>
                         </li>
                       </ul>
                     </div>

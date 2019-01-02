@@ -23,7 +23,7 @@ import LoadingScreen from 'react-loading-screen';
 
 import './App.css';
 
-//For testing
+//For dev
 // const clientId = "F3tSSYr2nCqndlGTrbWug";
 // const url = 'http://localhost:5000';
 
@@ -58,6 +58,7 @@ const dot = (color = '#ccc') => ({
   },
 });
 
+
 const colourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', width: '100%' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -91,8 +92,8 @@ class App extends Component {
       cmnd: "",
       completed: false,
       flex: 'column',
-      showSummary: true,
-      showDetail: true
+      showSummary: false,
+      showDetail: false
     }
   }
 
@@ -112,19 +113,19 @@ class App extends Component {
 
     //Check added members. If exist, update user info. If not, notify to user
     let membersRef = firebase.database().ref('Topics/BusinessDeployment/Events/2019/members');
-    membersRef.orderByChild('email').equalTo(response.user.email).once('value').then(snapshot => {
+    membersRef.orderByChild('email').equalTo(yammerAcc.email).once('value').then(snapshot => {
       if (snapshot.exists()) {
         let key = Object.keys(snapshot.val())[0];
         let updateData = {};
         updateData.key = key;
         updateData.id = id;
-        updateData.full_name = response.user.full_name;
+        updateData.full_name = yammerAcc.full_name;
         updateData.updated_full_name = snapshot.child(key).val().updated_full_name;
-        updateData.job_title = response.user.job_title;
-        updateData.department = response.user.department;
-        updateData.mugshot_url = response.user.mugshot_url.replace("48x48", "500x500");
-        updateData.email = response.user.email;
-        updateData.phoneNumber = response.user.contact.phone_numbers[0].number;
+        updateData.job_title = yammerAcc.job_title;
+        updateData.department = yammerAcc.department;
+        updateData.mugshot_url = yammerAcc.mugshot_url.replace("48x48", "500x500");
+        updateData.email = yammerAcc.email;
+        updateData.phoneNumber = yammerAcc.contact.phone_numbers[0].number;
         firebase.database().ref(`Topics/BusinessDeployment/Events/2019/members/${key}`).update(updateData).then((data) => {
           this.setState({
             ...this.state,
@@ -155,7 +156,7 @@ class App extends Component {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
       transportationTypes.forEach((transType) => {
-        transporationTypesData.push(transType.name + ' ' + transType.note);
+        transporationTypesData.push(transType.name + transType.dateTime + transType.note);
       });
       this.setState({
         transTypesArrive: transporationTypesData
@@ -166,7 +167,7 @@ class App extends Component {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
       transportationTypes.forEach((transType) => {
-        transporationTypesData.push(transType.name + ' ' + transType.note);
+        transporationTypesData.push(transType.name + transType.dateTime + transType.note);
       });
       this.setState({
         transTypesDeparture: transporationTypesData
@@ -435,22 +436,54 @@ class App extends Component {
           </div> :
           <div>
             <div style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex' }}>
-              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900">
+              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900" style={{textTransform: 'none', fontSize: 16,}}>
                 <strong>Hotline chung:</strong>
                 <div style={{ marginRight: 15 }}></div>
                 Vũ Diệu Ly 0918131900
-              </Fab>
+                </Fab>
               <br />
-              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846">
+              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846" style={{
+                boxShadow: 'none',
+                textTransform: 'none',
+                fontSize: 16,
+                padding: '6px 12px',
+                border: '1px solid',
+                backgroundColor: '#007bff',
+                borderColor: '#007bff',
+                fontFamily: [
+                  '-apple-system',
+                  'BlinkMacSystemFont',
+                  '"Segoe UI"',
+                  'Roboto',
+                  '"Helvetica Neue"',
+                  'Arial',
+                  'sans-serif',
+                  '"Apple Color Emoji"',
+                  '"Segoe UI Emoji"',
+                  '"Segoe UI Symbol"',
+                ].join(','),
+                '&:hover': {
+                  backgroundColor: '#0069d9',
+                  borderColor: '#0062cc',
+                },
+                '&:active': {
+                  boxShadow: 'none',
+                  backgroundColor: '#0062cc',
+                  borderColor: '#005cbf',
+                },
+                '&:focus': {
+                  boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+                },
+              }}>
                 <strong>Hotline phòng:</strong>
                 <div style={{ marginRight: 15 }}></div>
                 Nguyễn Việt An 0779933846
-              </Fab>
+                </Fab>
             </div>
             <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', backgroundColor: '#072790' }}>
               <img src={logoWhite} style={{ height: 80, marginLeft: 15 }} alt="logo" />
-              {this.state.flex === 'row' && <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 20 }}>TRIỂN KHAI KINH DOANH 2019</span>}
-              <Button color="primary" style={{ position: 'absolute', right: 10, color: 'white', fontWeight: 500 }} onClick={() => {
+              {this.state.flex === 'row' && <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 25 }}>TRIỂN KHAI KINH DOANH 2019</span>}
+              <Button color="primary" style={{ position: 'absolute', right: 10, color: 'white', fontWeight: 500, textTransform: 'none' }} onClick={() => {
                 window.location.reload();
               }}>
                 Đăng xuất
@@ -458,7 +491,7 @@ class App extends Component {
             </div>
             <div style={{ padding: 10, display: 'flex', flexDirection: this.state.flex }}>
               <div className="App-form">
-                <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60, backgroundColor: '#dbdbdb' }}>
+                <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60 }}>
                   <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />
                 </div>
                 <div style={{ marginTop: 10, color: '#1f419b', fontWeight: 'bold', fontSize: '1rem' }}>
@@ -470,10 +503,11 @@ class App extends Component {
                 <div style={{ marginTop: 10, color: '#676767', fontSize: '0.9rem' }}>
                   {this.state.userInfo.department}
                 </div>
-                <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: 'black' }}>
+                <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: 'black', backgroundColor: '#DAE7F2' }}>
                   <strong style={{ marginTop: 10, marginBottom: 10 }}>HƯỚNG DẪN</strong>
                   <div>Anh/Chị vui lòng nhấp chọn <Switch
                     color="primary"
+                    disabled={true}
                     onChange={() => {
                       this.setState({
                         temp: !this.state.temp
@@ -491,7 +525,7 @@ class App extends Component {
                       }}
                       value={false}
                     />
-                    Từ chối tham gia sự kiện
+                    là trạng thái <strong>Từ chối tham gia sự kiện </strong>
                   </div>
                   <div>
                     <Switch
@@ -502,7 +536,7 @@ class App extends Component {
                       }}
                       value={true}
                     />
-                    Đồng ý tham gia sự kiện
+                    là trạng thái <strong>Đồng ý tham gia sự kiện</strong>
                   </div>
                 </div>
                 <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
@@ -570,7 +604,7 @@ class App extends Component {
                         </RadioGroup>
                       </FormControl>
                       <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
-                      <FormControl component="fieldset" style={{ marginRight: 10 }}>
+                      <FormControl component="fieldset" style={{ marginRight: 10, marginBottom: 10}}>
                         <FormLabel component="legend">Anh/Chị vui lòng đăng ký hình thức di chuyển chiều đi</FormLabel>
                         <RadioGroup
                           aria-label="Di chuyển chiều đi"
@@ -711,7 +745,7 @@ class App extends Component {
                 </div>}
               </div>
               <div style={{ flex: 2, margin: 10, backgroundColor: '#f7f7f7' }}>
-                <Button style={{ backgroundColor: '#1f419b', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                <Button style={{ backgroundColor: '#009fda', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
                   onClick={() => {
                     this.setState({
                       showSummary: !this.state.showSummary
@@ -720,36 +754,36 @@ class App extends Component {
                   Thông tin chung
                 </Button>
                 {this.state.showSummary &&
-                  <div style={{margin: 20}}>
-                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10}}>HỘI NGHỊ TRIỂN KHAI KINH DOANH 2019</div>
-                    <div style={{ marginBottom: 10}}>
+                  <div style={{ margin: 20 }}>
+                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>HỘI NGHỊ TRIỂN KHAI KINH DOANH 2019</div>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Thời gian:</strong> Ngày 18 – 19 – 20.01.2019
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Địa điểm:</strong> The Grand Hồ Tràm Strip
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Địa chỉ:</strong> Ven Biển, Phước Thuận, Xuyên Mộc, Bà Rịa - Vũng Tàu
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Thông tin di chuyển:</strong>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5}}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
-                        <li style={{ marginBottom: 5}}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
-                        <li style={{ marginBottom: 5}}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>09:00</strong> và <strong>10:00</strong></li>
-                        <li style={{ marginBottom: 5}}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
-                        <li style={{ marginBottom: 5}}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
-                        <li style={{ marginBottom: 5}}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
+                        <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
+                        <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
+                        <li style={{ marginBottom: 5 }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>09:00</strong> và <strong>10:00</strong></li>
+                        <li style={{ marginBottom: 5 }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
+                        <li style={{ marginBottom: 5 }}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
+                        <li style={{ marginBottom: 5 }}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
                       </ul>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Thông tin về bữa ăn:</strong>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5}}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
+                        <li style={{ marginBottom: 5 }}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
                           <ul>
                             <li>Bữa ăn trưa 18.01.2019 tại khách sạn từ 12h – 14h</li>
                             <li>Bữa ăn tối 18.01.2019 tại khách sạn từ 18h – 21h</li>
@@ -758,28 +792,28 @@ class App extends Component {
                         </li>
                       </ul>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Thông tin về trang phục:</strong>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5}}>Ngày 18.01 & 19.01.2019:
+                        <li style={{ marginBottom: 5 }}>Ngày 18.01 & 19.01.2019:
                           <ul>
                             <li>Nam: Áo sơ mi ACB, quần tây</li>
                             <li>Nữ: Váy & vest ACB</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5}}>Gala tôn vinh:
+                        <li style={{ marginBottom: 5 }}>Gala tôn vinh:
                           <ul>
                             <li>Nam: Trang phục tiệc lịch sự, trang trọng</li>
                             <li>Nữ: Váy dạ hội</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5}}>Ngày 20.01: Áo thun ACB
+                        <li style={{ marginBottom: 5 }}>Ngày 20.01: Áo thun ACB
                         </li>
                       </ul>
                     </div>
-                    <div style={{ marginBottom: 10}}>
+                    <div style={{ marginBottom: 10 }}>
                       <strong>Để biết thêm thông tin chi tiết, anh/ chị vui lòng liên hệ Hotline của BTC</strong>
                     </div>
                   </div>

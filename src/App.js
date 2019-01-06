@@ -612,9 +612,9 @@ class App extends Component {
                     <div style={{ width: '80%' }}>
                       <TextField
                         id="standard-multiline-flexible"
-                        label="Anh/Chị vui lòng nhập CMND/Căn cước"
+                        label="Anh/Chị vui lòng nhập CMND"
                         disabled={this.state.completed}
-                        style={{ marginLeft: 20, marginRight: 20, width: 500 }}
+                        style={{ marginLeft: 20, marginRight: 20, maxWidth: 500 }}
                         value={this.state.cmnd}
                         onChange={this.handleChange('cmnd')}
                         fullWidth

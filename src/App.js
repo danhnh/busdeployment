@@ -86,6 +86,7 @@ class App extends Component {
         transportationDeparture: null,
         transportationArrive: null,
         location: null,
+        willJoinEvent: true
       },
       eventTimelineData: [],
       reason: "",
@@ -93,7 +94,8 @@ class App extends Component {
       completed: false,
       flex: 'column',
       showSummary: false,
-      showDetail: false
+      showDetail: false,
+      showEventRule: false
     }
   }
 
@@ -126,6 +128,8 @@ class App extends Component {
         updateData.mugshot_url = yammerAcc.mugshot_url.replace("48x48", "500x500");
         updateData.email = yammerAcc.email;
         updateData.phoneNumber = yammerAcc.contact.phone_numbers[0].number;
+        updateData.gender = snapshot.child(key).val().gender;
+        updateData.type = snapshot.child(key).val().type;
         firebase.database().ref(`Topics/BusinessDeployment/Events/2019/members/${key}`).update(updateData).then((data) => {
           this.setState({
             ...this.state,
@@ -198,6 +202,8 @@ class App extends Component {
           value: userArr[i].updated_full_name,
           label: userArr[i].updated_full_name,
           email: userArr[i].email,
+          gender: userArr[i].gender,
+          type: userArr[i].type,
           mugshot_url: userArr[i].mugshot_url
         });
       }
@@ -316,7 +322,9 @@ class App extends Component {
           roommateName: this.state.registrationInfo.willJoin ? this.state.roommate !== undefined ? this.state.roommate : '' : null,
           reason: this.state.reason ? this.state.reason : null,
           cmnd: this.state.cmnd ? this.state.cmnd : null,
-          mugshot_url: this.state.userInfo.mugshot_url
+          mugshot_url: this.state.userInfo.mugshot_url,
+          willJointEvent: this.state.userInfo.gender === '0' ? this.state.registrationInfo.willJoinEvent : null,
+          gender: this.state.userInfo.gender
         }
         firebase.database().ref(`Topics/BusinessDeployment/Events/2019/members/${key}`).set(updateData).then(snapshot => {
           this.setState({
@@ -335,26 +343,29 @@ class App extends Component {
     firebase.database().ref(`Topics/BusinessDeployment/Events/2019/programDetails`).once('value').then(snapshot => {
       let data = [];
       snapshot.forEach(child => {
-        let imageUrl = '';
-        if (child.hasChild('email')) {
-          let email = child.val().email;
-          let memberList = this.state.eventUsers;
-          memberList.forEach(user => {
-            if (user.email === email) {
-              imageUrl = user.mugshot_url.replace("48x48", "500x500");;
-            }
-          });
+        let type = child.val().type;
+        if (type.indexOf(this.state.userInfo.type) > -1) {
+          let imageUrl = '';
+          if (child.hasChild('email')) {
+            let email = child.val().email;
+            let memberList = this.state.eventUsers;
+            memberList.forEach(user => {
+              if (user.email === email) {
+                imageUrl = user.mugshot_url.replace("48x48", "500x500");;
+              }
+            });
+          }
+          let tempChild = {
+            time: child.val().startTime,
+            date: child.val().date,
+            title: child.val().title,
+            description: child.val().host !== "''" ? child.val().host : null,
+            allow: child.val().allow,
+            key: child.key,
+            imageUrl: imageUrl
+          }
+          data.push(tempChild);
         }
-        let tempChild = {
-          time: child.val().startTime,
-          date: child.val().date,
-          title: child.val().title,
-          description: child.val().host !== "''" ? child.val().host : null,
-          allow: child.val().allow,
-          key: child.key,
-          imageUrl: imageUrl
-        }
-        data.push(tempChild);
       });
 
       this.setState({
@@ -536,7 +547,7 @@ class App extends Component {
                   {this.state.userInfo.department}
                 </div>
                 <div style={{ marginTop: 10, padding: 20, fontSize: '0.9rem', color: '#1f419b', backgroundColor: '#DAE7F2' }}>
-                  <strong style={{ marginTop: 10, marginBottom: 10}}>HƯỚNG DẪN</strong>
+                  <strong style={{ marginTop: 10, marginBottom: 10 }}>HƯỚNG DẪN</strong>
                   <div>Anh/Chị vui lòng nhấp chọn <Switch
                     color="primary"
                     disabled={true}
@@ -636,7 +647,7 @@ class App extends Component {
                         </RadioGroup>
                       </FormControl>
                       <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
-                      <FormControl component="fieldset" style={{ marginRight: 10, marginBottom: 10}}>
+                      <FormControl component="fieldset" style={{ marginRight: 10, marginBottom: 10 }}>
                         <FormLabel component="legend">Anh/Chị vui lòng đăng ký hình thức di chuyển chiều đi</FormLabel>
                         <RadioGroup
                           aria-label="Di chuyển chiều đi"
@@ -750,6 +761,28 @@ class App extends Component {
                           })}
                         </FormGroup>
                       </FormControl>
+                      <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
+                      {this.state.userInfo.gender === '0' && <FormGroup row style={{ marginTop: 10, marginBottom: 10 }}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              disabled={this.state.completed}
+                              checked={this.state.registrationInfo.willJoinEvent}
+                              color="primary"
+                              onChange={() => {
+                                this.setState({
+                                  ...this.state,
+                                  registrationInfo: {
+                                    ...this.state.registrationInfo,
+                                    willJoinEvent: !this.state.registrationInfo.willJoinEvent
+                                  }
+                                })
+                              }}
+                              value={this.state.registrationInfo.willJoinEvent}
+                            />
+                          }
+                          label={this.state.registrationInfo.willJoinEvent ? "Tham gia cuộc thi 'Queen Of The Night'" : "Từ chối tham gia cuộc thi 'Queen Of The Night'"} />
+                      </FormGroup>}
                     </div>
                   </div>
                 )}
@@ -786,7 +819,7 @@ class App extends Component {
                   Thông tin chung
                 </Button>
                 {this.state.showSummary &&
-                  <div style={{ margin: 20, color: '#20419A'}}>
+                  <div style={{ margin: 20, color: '#20419A' }}>
                     <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>HỘI NGHỊ TRIỂN KHAI KINH DOANH 2019</div>
                     <div style={{ marginBottom: 10 }}>
                       <strong>Thời gian:</strong> Ngày 18 – 19 – 20.01.2019
@@ -804,8 +837,8 @@ class App extends Component {
                       <ul>
                         <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
                         <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
                         <li style={{ marginBottom: 5 }}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
                         <li style={{ marginBottom: 5 }}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
                       </ul>
@@ -816,8 +849,8 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li style={{ marginBottom: 5 }}>BTC sắp xếp lưu trú cho các anh chị tại The Grand Hồ Tràm Strip vào 2 đêm 19.01 & 20.01 (2 khách/ phòng). Nếu có yêu cầu về người ở cùng, anh chị vui lòng trao đổi thống nhất trước và đăng ký trong mục Đăng ký</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian nhận phòng: sau 15h Thứ Sáu, ngày 18.01.2018</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight:'bold' }}>Thời gian trả phòng: trước 12h Chủ Nhật, ngày 20.01.2018</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian nhận phòng: sau 15h Thứ Sáu, ngày 18.01.2018</li>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian trả phòng: trước 12h Chủ Nhật, ngày 20.01.2018</li>
                       </ul>
                     </div>
                     <div style={{ marginBottom: 10 }}>
@@ -826,7 +859,7 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li style={{ marginBottom: 5 }}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
-                          <ul style={{ color:'#27ae60' , fontWeight:'bold'}}>
+                          <ul style={{ color: '#27ae60', fontWeight: 'bold' }}>
                             <li>Bữa ăn trưa 18.01.2019 tại khách sạn từ 12h – 14h</li>
                             <li>Bữa ăn tối 18.01.2019 tại khách sạn từ 18h – 21h</li>
                             <li>Bữa ăn trưa 20.01.2019 tại khách sạn từ 12h – 14h</li>
@@ -839,20 +872,20 @@ class App extends Component {
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Ngày 18.01 & 19.01.2019:
-                          <ul style={{ color: '#1f419b', fontWeight: 'normal'}}>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Ngày 18.01 & 19.01.2019:
+                          <ul style={{ color: '#1f419b', fontWeight: 'normal' }}>
                             <li>Nam: Áo sơ mi ACB, quần tây</li>
                             <li>Nữ: Váy & vest ACB</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Gala tôn vinh:
-                          <ul style={{ color: '#1f419b', fontWeight: 'normal'}}>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Gala tôn vinh:
+                          <ul style={{ color: '#1f419b', fontWeight: 'normal' }}>
                             <li>Nam: Trang phục tiệc lịch sự, trang trọng</li>
                             <li>Nữ: Váy dạ hội</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5, color:'#27ae60' , fontWeight:'bold' }}>Ngày 20.01:
-                          <span style={{ color: '#1f419b', fontWeight: 'normal'}}>Áo thun ACB</span>
+                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Ngày 20.01:
+                          <span style={{ color: '#1f419b', fontWeight: 'normal' }}>Áo thun ACB</span>
                         </li>
                       </ul>
                     </div>
@@ -876,7 +909,7 @@ class App extends Component {
                         <VerticalTimelineElement
                           className="vertical-timeline-element-work"
                           date={`${event.date}\n${event.time}`}
-                          iconStyle={{ background: index % 2 === 0 ? '#1f419b' : 'rgb(33, 150, 243)', color: '#fff' }}
+                          iconStyle={{ background: index % 2 === 0 ? '#00b7ee' : '#a6ce38', color: '#fff' }}
                           icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
                           <h3 className="vertical-timeline-element-title">{event.title}</h3>
                           <p>
@@ -886,6 +919,75 @@ class App extends Component {
                       )
                     })}
                   </VerticalTimeline>
+                }
+                {this.state.userInfo.gender === '0' && <Button style={{ backgroundColor: '#a6ce38', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                  onClick={() => {
+                    this.setState({
+                      showEventRule: !this.state.showEventRule
+                    })
+                  }}>
+                  Thể lệ cuộc thi Queen Of The Night
+                </Button>}
+                {this.state.showEventRule &&
+                  <div style={{ margin: 20, color: '#20419A' }}>
+                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>THỂ LỆ CUỘC THI QUEEN OF THE NIGHT</div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>Cuộc thi “QUEEN OF THE NIGHT” là cuộc thi nhằm tôn vinh vẻ đẹp và tài năng của người phụ nữ ACB diễn ra từ ngày 18h30 đến lúc đóng cổng bình chọn ngày 19.01.2019 tại Đêm GALA Hội nghị Triển khai kinh doanh 2019</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>1. Khách mời nào có thể tham gia cuộc thi?</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      Những khách mời nữ tham dự đêm GALA Hội nghị Triển khai kinh doanh 2019
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>2. Làm thế nào để Bạn tham gia cuộc thi?</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <ul>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>Bước 1:</strong> Tải App Triển khai kinh doanh 2019
+                        </li>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>Bước 2:</strong> Sử dụng Camera của App TKKD 2019 để chụp và đăng ảnh
+                          <ul>
+                            <li>Nếu bạn hài lòng với ảnh vừa chụp thì nhấn “OK” ảnh sẽ tự động được đăng tải. Nếu bạn chưa hài lòng thì chọn “CHỤP LẠI” để chụp lại ảnh mới. Sau khi thoát bạn không thể xem lại ảnh cũ.</li>
+                            <li>Bạn chỉ có thể đăng tải duy nhất 1 ảnh.</li>
+                            <li>Ảnh chụp có thể là ảnh toàn thân hoặc bán thân.</li>
+                            <li>Ảnh chụp phải là ảnh cá nhân.</li>
+                            <li>Thời gian đăng ảnh từ <strong>18h30 đến trước khi đóng cổng bình chọn ngày 19.01.2019</strong></li>
+                            <li>Ảnh dự thi phải do nhân vật tham dự cuộc thi tự đăng tải, không chấp nhận ảnh dự thi từ bạn bè đăng hộ</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>3. Cách tìm ra QUEEN OF THE NIGHT?</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <ul>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>Vòng 1:</strong> Sử dụng App TKKD 2019 để bình chọn cho bức ảnh mà bạn yêu thích. Bạn có thể “Thả tim” cho nhiều ảnh cùng lúc nhưng chỉ được thả tim 1 lần cho 1 ảnh. 10 bức ảnh có nhiều lượt “thả tim” nhất sẽ được vào vòng trong.
+                        </li>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>Vòng 2:</strong> BTC sẽ đưa ra thử thách bí mật để TOP 10 vượt qua từ đó chọn ra QUEEN OF THE NIGHT
+                        </li>
+                      </ul>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <strong>4.	Giải thưởng cuộc thi?</strong>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <ul>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>01 giải Queen Of The Night:</strong> Vương miệng + 10 triệu đồng hiện kim + hoa.
+                        </li>
+                        <li>
+                          <strong style={{color: '#a6ce38'}}>09 giải TOP 10:</strong> Quà tặng Đèn ngủ tinh dầu + hoa.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 }
               </div>
               <Snackbar

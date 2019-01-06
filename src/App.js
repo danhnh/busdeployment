@@ -923,14 +923,14 @@ class App extends Component {
                     })}
                   </VerticalTimeline>
                 }
-                {this.state.userInfo.gender === '0' && <Button style={{ backgroundColor: '#a6ce38', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                <Button style={{ backgroundColor: '#a6ce38', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
                   onClick={() => {
                     this.setState({
                       showEventRule: !this.state.showEventRule
                     })
                   }}>
                   Thể lệ cuộc thi Queen Of The Night
-                </Button>}
+                </Button>
                 {this.state.showEventRule &&
                   <div style={{ margin: 20, color: '#20419A' }}>
                     <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>THỂ LỆ CUỘC THI QUEEN OF THE NIGHT</div>

@@ -251,7 +251,8 @@ class App extends Component {
             willJoin: snapshot.child(key).val().registered,
             transportationDeparture: snapshot.child(key).val().transportationDeparture,
             transportationArrive: snapshot.child(key).val().transportationArrive,
-            location: snapshot.child(key).val().location
+            location: snapshot.child(key).val().location,
+            willJoinEvent: snapshot.child(key).val().willJoinEvent
           },
           staySchedules: snapshot.child(key).val().staySchedules,
           eatSchedules: snapshot.child(key).val().eatSchedules,
@@ -324,7 +325,8 @@ class App extends Component {
           cmnd: this.state.cmnd ? this.state.cmnd : null,
           mugshot_url: this.state.userInfo.mugshot_url,
           willJointEvent: this.state.userInfo.gender === '0' ? this.state.registrationInfo.willJoinEvent : null,
-          gender: this.state.userInfo.gender
+          gender: this.state.userInfo.gender,
+          type: this.state.userInfo.type,
         }
         firebase.database().ref(`Topics/BusinessDeployment/Events/2019/members/${key}`).set(updateData).then(snapshot => {
           this.setState({
@@ -344,6 +346,7 @@ class App extends Component {
       let data = [];
       snapshot.forEach(child => {
         let type = child.val().type;
+        console.debug(this.state.userInfo);
         if (type.indexOf(this.state.userInfo.type) > -1) {
           let imageUrl = '';
           if (child.hasChild('email')) {

@@ -25,12 +25,12 @@ import Icon from '@material-ui/core/Icon';
 import './App.css';
 
 //For dev
-// const clientId = "F3tSSYr2nCqndlGTrbWug";
-// const url = 'http://localhost:5000';
+const clientId = "F3tSSYr2nCqndlGTrbWug";
+const url = 'http://localhost:5000';
 
 //For production
-const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
-const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
+// const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
+// const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
 
 const urlToken = `${url}/oauth2/token`;
 
@@ -772,7 +772,13 @@ class App extends Component {
                       <ul>
                         <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
                         <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
-                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>07:30</strong> và <strong>09:30</strong></li>
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>
+                          Thời gian khởi hành từ TP.HCM đi Hồ Tràm - thứ Năm ngày 18.01.2019 lúc:
+                          <ul>
+                            <li><strong>07:30</strong> đến nơi lúc <strong>11:30</strong></li>
+                            <li><strong>09:30</strong> đến nơi lúc <strong>13:30</strong></li>
+                          </ul>
+                        </li>
                         <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
                         <li style={{ marginBottom: 5 }}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
                         <li style={{ marginBottom: 5 }}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
@@ -820,7 +826,7 @@ class App extends Component {
                           </ul>
                         </li>
                         <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Ngày 20.01:
-                          <span style={{ color: '#1f419b', fontWeight: 'normal' }}>Áo thun ACB</span>
+                          <span style={{ color: '#1f419b', fontWeight: 'normal' }}>Áo thun ACB (xanh lá non)</span>
                         </li>
                       </ul>
                     </div>

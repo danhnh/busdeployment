@@ -25,12 +25,12 @@ import Icon from '@material-ui/core/Icon';
 import './App.css';
 
 //For dev
-const clientId = "F3tSSYr2nCqndlGTrbWug";
-const url = 'http://localhost:5000';
+// const clientId = "F3tSSYr2nCqndlGTrbWug";
+// const url = 'http://localhost:5000';
 
 //For production
-// const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
-// const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
+const clientId = "0JqrtQdnp8sRHVr2pxx0dA";
+const url = 'https://trienkhaikinhdoanh-acb.azurewebsites.net/';
 
 const urlToken = `${url}/oauth2/token`;
 

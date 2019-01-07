@@ -20,6 +20,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { OauthSender, OauthReceiver } from 'react-oauth-flow';
 import firebase from 'firebase';
 import LoadingScreen from 'react-loading-screen';
+import Icon from '@material-ui/core/Icon';
 
 import './App.css';
 
@@ -95,7 +96,8 @@ class App extends Component {
       flex: 'column',
       showSummary: false,
       showDetail: false,
-      showEventRule: false
+      showEventRule: false,
+      showSupport: false
     }
   }
 
@@ -346,7 +348,6 @@ class App extends Component {
       let data = [];
       snapshot.forEach(child => {
         let type = child.val().type;
-        console.debug(this.state.userInfo);
         if (type.indexOf(this.state.userInfo.type) > -1) {
           let imageUrl = '';
           if (child.hasChild('email')) {
@@ -414,7 +415,7 @@ class App extends Component {
           <div className="App">
             <header className="App-header">
               <img src={logo} className="App-logo" alt="logo" />
-              <h1 style={{ color: '#264295', marginBottom: 20, maxWidth: '80%', fontSize: 50 }}>TRIỂN KHAI KINH DOANH 2019</h1>
+              <h1 style={{ color: '#264295', marginBottom: 20, maxWidth: '80%', fontSize: 40 }}>TRIỂN KHAI KINH DOANH 2019</h1>
               <OauthSender
                 authorizeUrl="https://www.yammer.com/oauth2/authorize"
                 clientId={clientId}
@@ -449,83 +450,6 @@ class App extends Component {
             />
           </div> :
           <div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 10000, flexDirection: 'column', display: 'flex' }}>
-              <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84918131900" style={{
-                boxShadow: 'none',
-                textTransform: 'none',
-                fontSize: 16,
-                padding: '6px 12px',
-                border: '1px solid',
-                backgroundColor: '#00b7ee',
-                borderColor: '#00b7ee',
-                fontFamily: [
-                  '-apple-system',
-                  'BlinkMacSystemFont',
-                  '"Segoe UI"',
-                  'Roboto',
-                  '"Helvetica Neue"',
-                  'Arial',
-                  'sans-serif',
-                  '"Apple Color Emoji"',
-                  '"Segoe UI Emoji"',
-                  '"Segoe UI Symbol"',
-                ].join(','),
-                '&:hover': {
-                  backgroundColor: '#00b7ee',
-                  borderColor: '#00b7ee',
-                },
-                '&:active': {
-                  boxShadow: 'none',
-                  backgroundColor: '#00b7ee',
-                  borderColor: '#00b7ee',
-                },
-                '&:focus': {
-                  boxShadow: '0 0 0 0.2rem #00b7ee',
-                },
-              }}>
-                <strong>Hotline chung:</strong>
-                <div style={{ marginRight: 15 }}></div>
-                Vũ Diệu Ly 0918131900
-                </Fab>
-              <br />
-              <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846" style={{
-                boxShadow: 'none',
-                textTransform: 'none',
-                fontSize: 16,
-                padding: '6px 12px',
-                border: '1px solid',
-                backgroundColor: '#a6ce38',
-                borderColor: '#a6ce38',
-                fontFamily: [
-                  '-apple-system',
-                  'BlinkMacSystemFont',
-                  '"Segoe UI"',
-                  'Roboto',
-                  '"Helvetica Neue"',
-                  'Arial',
-                  'sans-serif',
-                  '"Apple Color Emoji"',
-                  '"Segoe UI Emoji"',
-                  '"Segoe UI Symbol"',
-                ].join(','),
-                '&:hover': {
-                  backgroundColor: '#a6ce38',
-                  borderColor: '#a6ce38',
-                },
-                '&:active': {
-                  boxShadow: 'none',
-                  backgroundColor: '#a6ce38',
-                  borderColor: '#a6ce38',
-                },
-                '&:focus': {
-                  boxShadow: '0 0 0 0.2rem #a6ce38',
-                },
-              }}>
-                <strong>Hotline phòng:</strong>
-                <div style={{ marginRight: 15 }}></div>
-                Nguyễn Việt An 0779933846
-                </Fab>
-            </div>
             <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', backgroundColor: '#072790' }}>
               <img src={logoWhite} style={{ height: 80, marginLeft: 15 }} alt="logo" />
               {this.state.flex === 'row' && <span style={{ marginLeft: 20, textTransform: 'uppercase', fontWeight: 700, color: 'white', fontSize: 25 }}>TRIỂN KHAI KINH DOANH 2019</span>}
@@ -537,6 +461,12 @@ class App extends Component {
             </div>
             <div style={{ padding: 10, display: 'flex', flexDirection: this.state.flex }}>
               <div className="App-form">
+                <div style={{ textAlign: 'center', marginTop: 10, color: '#1f419b', fontSize: 26, fontWeight: 'bold'}}>
+                  ĐĂNG KÝ THAM GIA
+                </div>
+                <div style={{ textAlign: 'center', marginTop: 10, color: '#c9dd03', fontSize: 20, fontWeight: 'bold'}}>
+                  {this.state.completed ? this.state.registrationInfo.willJoin ? "Đã đăng ký tham gia" : "Từ chối tham gia" : null }
+                </div>
                 <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60 }}>
                   <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />
                 </div>
@@ -563,6 +493,17 @@ class App extends Component {
                   /> để xác nhận tham dự sự kiện</div>
                   <div>
                     <Switch
+                      checked={true}
+                      color="primary"
+                      onChange={() => {
+
+                      }}
+                      value={true}
+                    />
+                    là trạng thái <strong>Đồng ý tham gia sự kiện</strong>
+                  </div>
+                  <div>
+                    <Switch
                       disabled={true}
                       checked={false}
                       color="primary"
@@ -572,17 +513,6 @@ class App extends Component {
                       value={false}
                     />
                     là trạng thái <strong>Từ chối tham gia sự kiện </strong>
-                  </div>
-                  <div>
-                    <Switch
-                      checked={true}
-                      color="primary"
-                      onChange={() => {
-
-                      }}
-                      value={true}
-                    />
-                    là trạng thái <strong>Đồng ý tham gia sự kiện</strong>
                   </div>
                 </div>
                 <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 10, marginBottom: 10 }} />
@@ -677,6 +607,7 @@ class App extends Component {
                           })}
                         </RadioGroup>
                       </FormControl>
+                      <div style={{ marginBottom: 30}}/>
                       <FormControl component="fieldset" style={{ marginRight: 10 }}>
                         <FormLabel component="legend">Anh/Chị vui lòng đăng ký hình thức di chuyển chiều về</FormLabel>
                         <RadioGroup
@@ -784,7 +715,7 @@ class App extends Component {
                               value={this.state.registrationInfo.willJoinEvent}
                             />
                           }
-                          label={this.state.registrationInfo.willJoinEvent ? "Tham gia cuộc thi 'Queen Of The Night'" : "Từ chối tham gia cuộc thi 'Queen Of The Night'"} />
+                          label={this.state.registrationInfo.willJoinEvent ? `Tham gia cuộc thi "Queen Of The Night"` : `Từ chối tham gia cuộc thi "Queen Of The Night"`} />
                       </FormGroup>}
                     </div>
                   </div>
@@ -820,6 +751,7 @@ class App extends Component {
                     })
                   }}>
                   Thông tin chung
+                  <Icon style={{position: 'absolute', right: 20}}>arrow_drop_down_circle</Icon>
                 </Button>
                 {this.state.showSummary &&
                   <div style={{ margin: 20, color: '#20419A' }}>
@@ -840,8 +772,8 @@ class App extends Component {
                       <ul>
                         <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
                         <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian khởi hành từ TP.HCM đi Hồ Tràm 2 chuyến xe ngày thứ Năm 18.01.2019: <strong>08:00</strong> và <strong>10:00</strong></li>
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian khởi hành từ Hồ Tràm về TP.HCM từ sau 12:00 đến 14:00 Chủ Nhật 20.01.2019 (thời gian khởi hành linh động khi đủ số lượng khách trên xe)</li>
                         <li style={{ marginBottom: 5 }}>Trường hợp anh/ chị không đi cùng xe đoàn, vui lòng chọn “Tự túc di chuyển đến Hồ Tràm” trong mục đăng ký di chuyển</li>
                         <li style={{ marginBottom: 5 }}>Đối với khu vực TP.HCM: Trung Tâm Điều Xe sẽ không giải quyết các trường hợp yêu cầu xe công vụ riêng lẻ và không thanh toán các chi phí phát sinh</li>
                       </ul>
@@ -851,9 +783,9 @@ class App extends Component {
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5 }}>BTC sắp xếp lưu trú cho các anh chị tại The Grand Hồ Tràm Strip vào 2 đêm 19.01 & 20.01 (2 khách/ phòng). Nếu có yêu cầu về người ở cùng, anh chị vui lòng trao đổi thống nhất trước và đăng ký trong mục Đăng ký</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian nhận phòng: sau 15h Thứ Sáu, ngày 18.01.2018</li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Thời gian trả phòng: trước 12h Chủ Nhật, ngày 20.01.2018</li>
+                        <li style={{ marginBottom: 5 }}>BTC sắp xếp lưu trú cho các anh chị tại The Grand Hồ Tràm Strip vào 2 đêm 18.01 & 19.01 (2 khách/ phòng). Nếu có yêu cầu về người ở cùng, anh chị vui lòng trao đổi thống nhất trước và đăng ký trong mục Đăng ký</li>
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian nhận phòng: sau 15h Thứ Sáu, ngày 18.01.2018</li>
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Thời gian trả phòng: trước 12h Chủ Nhật, ngày 20.01.2018</li>
                       </ul>
                     </div>
                     <div style={{ marginBottom: 10 }}>
@@ -862,7 +794,7 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li style={{ marginBottom: 5 }}>Ngoài các bữa ăn trong ngày theo lịch trình họp, BTC có sắp xếp 3 bữa ăn tùy chọn. Anh/Chị vui lòng đăng ký trong mục Đăng ký:
-                          <ul style={{ color: '#27ae60', fontWeight: 'bold' }}>
+                          <ul style={{ color: '#c9dd03', fontWeight: 'bold' }}>
                             <li>Bữa ăn trưa 18.01.2019 tại khách sạn từ 12h – 14h</li>
                             <li>Bữa ăn tối 18.01.2019 tại khách sạn từ 18h – 21h</li>
                             <li>Bữa ăn trưa 20.01.2019 tại khách sạn từ 12h – 14h</li>
@@ -875,19 +807,19 @@ class App extends Component {
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Ngày 18.01 & 19.01.2019:
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Ngày 18.01 & 19.01.2019:
                           <ul style={{ color: '#1f419b', fontWeight: 'normal' }}>
                             <li>Nam: Áo sơ mi ACB, quần tây</li>
                             <li>Nữ: Váy & vest ACB</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Gala tôn vinh:
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Gala tôn vinh:
                           <ul style={{ color: '#1f419b', fontWeight: 'normal' }}>
                             <li>Nam: Trang phục tiệc lịch sự, trang trọng</li>
                             <li>Nữ: Váy dạ hội</li>
                           </ul>
                         </li>
-                        <li style={{ marginBottom: 5, color: '#27ae60', fontWeight: 'bold' }}>Ngày 20.01:
+                        <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>Ngày 20.01:
                           <span style={{ color: '#1f419b', fontWeight: 'normal' }}>Áo thun ACB</span>
                         </li>
                       </ul>
@@ -904,6 +836,7 @@ class App extends Component {
                     })
                   }}>
                   Lịch trình chi tiết
+                  <Icon style={{position: 'absolute', right: 20}}>arrow_drop_down_circle</Icon>
                 </Button>
                 {this.state.showDetail &&
                   <VerticalTimeline>
@@ -911,8 +844,8 @@ class App extends Component {
                       return (
                         <VerticalTimelineElement
                           className="vertical-timeline-element-work"
-                          date={`${event.date}\n${event.time}`}
-                          iconStyle={{ background: index % 2 === 0 ? '#00b7ee' : '#a6ce38', color: '#fff' }}
+                          date={`${event.date}  ${event.time}`}
+                          iconStyle={{ background: index % 2 === 0 ? '#00b7ee' : '#c9dd03', color: '#fff' }}
                           icon={<Avatar src={event.imageUrl} style={event.imageUrl !== '' ? { width: '100%', height: '100%' } : { width: '0%' }} />}>
                           <h3 className="vertical-timeline-element-title">{event.title}</h3>
                           <p>
@@ -923,19 +856,20 @@ class App extends Component {
                     })}
                   </VerticalTimeline>
                 }
-                <Button style={{ backgroundColor: '#a6ce38', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                <Button style={{ backgroundColor: '#c9dd03', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}
                   onClick={() => {
                     this.setState({
                       showEventRule: !this.state.showEventRule
                     })
                   }}>
-                  Thể lệ cuộc thi Queen Of The Night
+                  Thể lệ cuộc thi "Queen Of The Night"
+                  <Icon style={{position: 'absolute', right: 20}}>arrow_drop_down_circle</Icon>
                 </Button>
                 {this.state.showEventRule &&
                   <div style={{ margin: 20, color: '#20419A' }}>
-                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>THỂ LỆ CUỘC THI QUEEN OF THE NIGHT</div>
+                    <div style={{ fontSize: 20, color: '#1f419b', fontWeight: 'bold', marginBottom: 10 }}>THỂ LỆ CUỘC THI "QUEEN OF THE NIGHT"</div>
                     <div style={{ marginBottom: 10 }}>
-                      <strong>Cuộc thi “QUEEN OF THE NIGHT” là cuộc thi nhằm tôn vinh vẻ đẹp và tài năng của người phụ nữ ACB diễn ra từ ngày 18h30 đến lúc đóng cổng bình chọn ngày 19.01.2019 tại Đêm GALA Hội nghị Triển khai kinh doanh 2019</strong>
+                      <strong>Cuộc thi “QUEEN OF THE NIGHT” là cuộc thi nhằm tôn vinh vẻ đẹp và tài năng của người phụ nữ ACB diễn ra từ 18h30 đến lúc đóng cổng bình chọn ngày 19.01.2019 tại Đêm GALA Hội nghị Triển khai kinh doanh 2019</strong>
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <strong>1. Khách mời nào có thể tham gia cuộc thi?</strong>
@@ -949,10 +883,10 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>Bước 1:</strong> Tải App Triển khai kinh doanh 2019
+                          <strong style={{ color: '#c9dd03' }}>Bước 1:</strong> Tải App Triển khai kinh doanh 2019
                         </li>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>Bước 2:</strong> Sử dụng Camera của App TKKD 2019 để chụp và đăng ảnh
+                          <strong style={{ color: '#c9dd03' }}>Bước 2:</strong> Sử dụng Camera của App TKKD 2019 để chụp và đăng ảnh
                           <ul>
                             <li>Nếu bạn hài lòng với ảnh vừa chụp thì nhấn “OK” ảnh sẽ tự động được đăng tải. Nếu bạn chưa hài lòng thì chọn “CHỤP LẠI” để chụp lại ảnh mới. Sau khi thoát bạn không thể xem lại ảnh cũ.</li>
                             <li>Bạn chỉ có thể đăng tải duy nhất 1 ảnh.</li>
@@ -965,15 +899,15 @@ class App extends Component {
                       </ul>
                     </div>
                     <div style={{ marginBottom: 10 }}>
-                      <strong>3. Cách tìm ra QUEEN OF THE NIGHT?</strong>
+                      <strong>3. Cách tìm ra "QUEEN OF THE NIGHT"?</strong>
                     </div>
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>Vòng 1:</strong> Sử dụng App TKKD 2019 để bình chọn cho bức ảnh mà bạn yêu thích. Bạn có thể “Thả tim” cho nhiều ảnh cùng lúc nhưng chỉ được thả tim 1 lần cho 1 ảnh. 10 bức ảnh có nhiều lượt “thả tim” nhất sẽ được vào vòng trong.
+                          <strong style={{ color: '#c9dd03' }}>Vòng 1:</strong> Sử dụng App TKKD 2019 để bình chọn cho bức ảnh mà bạn yêu thích. Bạn có thể “Thả tim” cho nhiều ảnh cùng lúc nhưng chỉ được thả tim 1 lần cho 1 ảnh. 10 bức ảnh có nhiều lượt “thả tim” nhất sẽ được vào vòng trong.
                         </li>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>Vòng 2:</strong> BTC sẽ đưa ra thử thách bí mật để TOP 10 vượt qua từ đó chọn ra QUEEN OF THE NIGHT
+                          <strong style={{ color: '#c9dd03' }}>Vòng 2:</strong> BTC sẽ đưa ra thử thách bí mật để TOP 10 vượt qua từ đó chọn ra "QUEEN OF THE NIGHT"
                         </li>
                       </ul>
                     </div>
@@ -983,13 +917,177 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>01 giải Queen Of The Night:</strong> Vương miệng + 10 triệu đồng hiện kim + hoa.
+                          <strong style={{ color: '#c9dd03' }}>01 giải "Queen Of The Night":</strong> Vương miệng + Hiện kim: 10 triệu đồng + hoa.
                         </li>
                         <li>
-                          <strong style={{color: '#a6ce38'}}>09 giải TOP 10:</strong> Quà tặng Đèn ngủ tinh dầu + hoa.
+                          <strong style={{ color: '#c9dd03' }}>09 giải TOP 10:</strong> Quà tặng + hoa.
                         </li>
                       </ul>
                     </div>
+                  </div>
+                }
+                <Button style={{ backgroundColor: '#00b7ee', width: '100%', marginBottom: 2, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'left' }}
+                  onClick={() => {
+                    this.setState({
+                      showSupport: !this.state.showSupport
+                    })
+                  }}>
+                  Hotline
+                  <Icon style={{position: 'absolute', right: 20}}>arrow_drop_down_circle</Icon>
+                </Button>
+                {this.state.showSupport &&
+                  <div style={{ margin: 20, color: '#20419A' }}>
+                    <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84909866988" style={{
+                      boxShadow: 'none',
+                      textTransform: 'none',
+                      fontSize: 16,
+                      padding: '6px 12px',
+                      border: '1px solid',
+                      backgroundColor: 'rgb(0, 159, 218)',
+                      borderColor: 'rgb(0, 159, 218)',
+                      fontFamily: [
+                        '-apple-system',
+                        'BlinkMacSystemFont',
+                        '"Segoe UI"',
+                        'Roboto',
+                        '"Helvetica Neue"',
+                        'Arial',
+                        'sans-serif',
+                        '"Apple Color Emoji"',
+                        '"Segoe UI Emoji"',
+                        '"Segoe UI Symbol"',
+                      ].join(','),
+                      '&:hover': {
+                        backgroundColor: 'rgb(0, 159, 218)',
+                        borderColor: 'rgb(0, 159, 218)',
+                      },
+                      '&:active': {
+                        boxShadow: 'none',
+                        backgroundColor: 'rgb(0, 159, 218)',
+                        borderColor: 'rgb(0, 159, 218)',
+                      },
+                      '&:focus': {
+                        boxShadow: '0 0 0 0.2rem rgb(0, 159, 218)',
+                      },
+                    }}>
+                      <strong>Hỗ trợ về website đăng ký/App:</strong>
+                      <div style={{ marginRight: 15 }}></div>
+                      Nguyễn Huy Danh 0909866988
+                    </Fab>
+                    <div style={{ marginBottom: 30 }} />
+                    <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84779933846" style={{
+                      boxShadow: 'none',
+                      textTransform: 'none',
+                      fontSize: 16,
+                      padding: '6px 12px',
+                      border: '1px solid',
+                      backgroundColor: 'rgb(31, 65, 155)',
+                      borderColor: 'rgb(31, 65, 155)',
+                      fontFamily: [
+                        '-apple-system',
+                        'BlinkMacSystemFont',
+                        '"Segoe UI"',
+                        'Roboto',
+                        '"Helvetica Neue"',
+                        'Arial',
+                        'sans-serif',
+                        '"Apple Color Emoji"',
+                        '"Segoe UI Emoji"',
+                        '"Segoe UI Symbol"',
+                      ].join(','),
+                      '&:hover': {
+                        backgroundColor: 'rgb(31, 65, 155)',
+                        borderColor: 'rgb(31, 65, 155)',
+                      },
+                      '&:active': {
+                        boxShadow: 'none',
+                        backgroundColor: 'rgb(31, 65, 155)',
+                        borderColor: 'rgb(31, 65, 155)',
+                      },
+                      '&:focus': {
+                        boxShadow: '0 0 0 0.2rem rgb(31, 65, 155)',
+                      },
+                    }}>
+                      <strong>Phòng lưu trú:</strong>
+                      <div style={{ marginRight: 15 }}></div>
+                      Nguyễn Việt An 0779933846
+                    </Fab>
+                    <div style={{ marginBottom: 30 }} />
+                    <Fab color="primary" variant="extended" aria-label="Hotline" href="tel:+84705229248" style={{
+                      boxShadow: 'none',
+                      textTransform: 'none',
+                      fontSize: 16,
+                      padding: '6px 12px',
+                      border: '1px solid',
+                      backgroundColor: '#c9dd03',
+                      borderColor: '#c9dd03',
+                      fontFamily: [
+                        '-apple-system',
+                        'BlinkMacSystemFont',
+                        '"Segoe UI"',
+                        'Roboto',
+                        '"Helvetica Neue"',
+                        'Arial',
+                        'sans-serif',
+                        '"Apple Color Emoji"',
+                        '"Segoe UI Emoji"',
+                        '"Segoe UI Symbol"',
+                      ].join(','),
+                      '&:hover': {
+                        backgroundColor: '#c9dd03',
+                        borderColor: '#c9dd03',
+                      },
+                      '&:active': {
+                        boxShadow: 'none',
+                        backgroundColor: '#c9dd03',
+                        borderColor: '#c9dd03',
+                      },
+                      '&:focus': {
+                        boxShadow: '0 0 0 0.2rem #c9dd03',
+                      },
+                    }}>
+                      <strong>Xe đón tiễn:</strong>
+                      <div style={{ marginRight: 15 }}></div>
+                      Lê Ngọc Thuý Ái 0705229248
+                    </Fab>
+                    <div style={{ marginBottom: 30 }} />
+                    <Fab color="secondary" variant="extended" aria-label="Hotline" href="tel:+84918131900" style={{
+                      boxShadow: 'none',
+                      textTransform: 'none',
+                      fontSize: 16,
+                      padding: '6px 12px',
+                      border: '1px solid',
+                      backgroundColor: '#00b7ee',
+                      borderColor: '#00b7ee',
+                      fontFamily: [
+                        '-apple-system',
+                        'BlinkMacSystemFont',
+                        '"Segoe UI"',
+                        'Roboto',
+                        '"Helvetica Neue"',
+                        'Arial',
+                        'sans-serif',
+                        '"Apple Color Emoji"',
+                        '"Segoe UI Emoji"',
+                        '"Segoe UI Symbol"',
+                      ].join(','),
+                      '&:hover': {
+                        backgroundColor: '#00b7ee',
+                        borderColor: '#00b7ee',
+                      },
+                      '&:active': {
+                        boxShadow: 'none',
+                        backgroundColor: '#00b7ee',
+                        borderColor: '#00b7ee',
+                      },
+                      '&:focus': {
+                        boxShadow: '0 0 0 0.2rem #00b7ee',
+                      },
+                    }}>
+                      <strong>Thông tin chung về chương trình:</strong>
+                      <div style={{ marginRight: 15 }}></div>
+                      Vũ Diệu Ly 0918131900
+                </Fab>
                   </div>
                 }
               </div>

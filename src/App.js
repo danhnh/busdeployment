@@ -157,10 +157,11 @@ class App extends Component {
     })
   };
 
-  getTransporationTypes() {
+  getTransporationTypes = () => {
     firebase.database().ref('TransportationTypeArriveTypes').once('value').then(snapshot => {
       let transportationTypes = Object.values(snapshot.val());
       let transporationTypesData = [];
+      console.log(this.state.userInfo);
       transportationTypes.forEach((transType) => {
         transporationTypesData.push(transType.name + transType.dateTime + transType.note);
       });
@@ -923,7 +924,7 @@ class App extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <ul>
                         <li>
-                          <strong style={{ color: '#c9dd03' }}>01 giải "Queen Of The Night":</strong> Vương miệng + Hiện kim: 10 triệu đồng + hoa.
+                          <strong style={{ color: '#c9dd03' }}>01 giải "Queen Of The Night":</strong> Vương miệng + Hiện kim: 20 triệu đồng + hoa.
                         </li>
                         <li>
                           <strong style={{ color: '#c9dd03' }}>09 giải TOP 10:</strong> Quà tặng + hoa.

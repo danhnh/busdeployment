@@ -774,7 +774,7 @@ class App extends Component {
                         <li style={{ marginBottom: 5 }}>Anh/ chị vui lòng chủ động mua vé máy bay khứ hồi đến TP.HCM. Các chi phí sẽ được thanh toán theo quy chế chi tiêu nội bộ</li>
                         <li style={{ marginBottom: 5 }}>BTC bố trí xe từ TP.HCM – Hồ Tràm. Xe sẽ đón & trả đoàn tại Cung Văn Hóa Lao Động - 55B Nguyễn Thị Minh Khai, P. Bến Thành, Q.1, TP. Hồ Chí Minh, anh/ chị vui lòng đăng ký xe và tự túc di chuyển đến địa điểm đón</li>
                         <li style={{ marginBottom: 5, color: '#c9dd03', fontWeight: 'bold' }}>
-                          Thời gian khởi hành từ TP.HCM đi Hồ Tràm - thứ Năm ngày 18.01.2019 lúc:
+                          Thời gian khởi hành từ TP.HCM đi Hồ Tràm - thứ Sáu ngày 18.01.2019 lúc:
                           <ul>
                             <li><strong>07:30</strong> đến nơi lúc <strong>11:30</strong></li>
                             <li><strong>09:30</strong> đến nơi lúc <strong>13:30</strong></li>

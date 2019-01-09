@@ -259,7 +259,7 @@ class App extends Component {
           },
           staySchedules: snapshot.child(key).val().staySchedules,
           eatSchedules: snapshot.child(key).val().eatSchedules,
-          roommateName: snapshot.child(key).val().registered ? snapshot.child(key).val().roommateName : null,
+          roommateName: snapshot.child(key).val().registered ? snapshot.child(key).val().roommateName.value : null,
           reason: snapshot.child(key).val().reason,
           cmnd: snapshot.child(key).val().cmnd,
           completed: true
@@ -661,7 +661,18 @@ class App extends Component {
                     </FormControl>
                     <div style={{ marginLeft: 20, marginTop: 10, width: '100%', flexDirection: 'row' }}>
                       <div style={{ marginTop: 20, marginBottom: 20, width: 300 }}>
-                        <Select
+                        {this.state.completed && 
+                          <TextField
+                            id="standard-multiline-flexible"
+                            label="Bạn cùng phòng"
+                            disabled={true}
+                            style={{ marginLeft: 20, marginRight: 20, marginTop: -10, maxWidth: 500 }}
+                            value={this.state.roommateName}
+                            fullWidth
+                            margin="normal"
+                          />
+                        }
+                        {!this.state.completed && <Select
                           isDisabled={this.state.completed}
                           value={this.state.roommate}
                           onChange={(selectedOption) => {
@@ -672,7 +683,7 @@ class App extends Component {
                           options={this.state.eventUsers}
                           isSearchable={true}
                           styles={colourStyles}
-                          placeholder="Chọn bạn cùng phòng" />
+                          placeholder="Chọn bạn cùng phòng" />}
                       </div>
                       <div style={{ width: '90%', height: 1, backgroundColor: 'gray', marginTop: 20, marginBottom: 20 }} />
                       <FormControl component="fieldset">

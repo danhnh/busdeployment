@@ -97,7 +97,8 @@ class App extends Component {
       showSummary: false,
       showDetail: false,
       showEventRule: false,
-      showSupport: false
+      showSupport: false,
+      closeRegistered: true,
     }
   }
 
@@ -263,6 +264,15 @@ class App extends Component {
           reason: snapshot.child(key).val().reason,
           cmnd: snapshot.child(key).val().cmnd,
           completed: true
+        })
+      } else if (this.state.closeRegistered){
+        this.setState({
+          ...this.state,
+          registrationInfo: {
+            ...this.registrationInfo,
+            willJoin: false
+          },
+          completed: true,
         })
       }
     })
@@ -466,7 +476,7 @@ class App extends Component {
                   ĐĂNG KÝ THAM GIA
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 10, color: '#c9dd03', fontSize: 20, fontWeight: 'bold'}}>
-                  {this.state.completed ? this.state.registrationInfo.willJoin ? "Đã đăng ký tham gia" : "Từ chối tham gia" : null }
+                  {this.state.closeRegistered ? "Đã đóng cổng đăng ký" : this.state.completed ? this.state.registrationInfo.willJoin ? "Đã đăng ký tham gia" : "Từ chối tham gia" : null }
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 10, height: 120, width: 120, borderRadius: 60 }}>
                   <Avatar src={this.state.userInfo.mugshot_url} style={{ width: 120, height: 120 }} />

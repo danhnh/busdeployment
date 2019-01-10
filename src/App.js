@@ -129,7 +129,7 @@ class App extends Component {
         updateData.department = yammerAcc.department;
         updateData.mugshot_url = yammerAcc.mugshot_url.replace("48x48", "500x500");
         updateData.email = yammerAcc.email;
-        updateData.phoneNumber = yammerAcc.contact.phone_numbers[0].number;
+        updateData.phoneNumber = yammerAcc.contact && yammerAcc.contact.phone_numbers[0] ? yammerAcc.contact.phone_numbers[0].number : null;
         updateData.gender = snapshot.child(key).val().gender;
         updateData.type = snapshot.child(key).val().type;
         firebase.database().ref(`Topics/BusinessDeployment/Events/2019/members/${key}`).update(updateData).then((data) => {
